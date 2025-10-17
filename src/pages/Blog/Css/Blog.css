@@ -1,0 +1,89 @@
+.carousel-caption {
+      background: rgba(0,0,0,0.6);
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      bottom: 2rem;
+    }
+    .carousel-caption h5 {
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 1rem;
+      letter-spacing: 1.5px;
+      margin-bottom: 0.25rem;
+      color: #fff;
+    }
+    .carousel-caption p {
+       
+      font-weight: 300;
+      font-size: 0.85rem;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 90vw;
+    }
+    .dfgvswrfcxcfsrfsddf img{
+      height: 65vh;
+      object-fit: cover;
+    }
+    /* Article Titles large, uppercase, thin */
+    .article-title {
+       
+      font-weight: 700;
+      font-size: 1.6rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 0.25rem;
+    }
+    .article-subtitle {       
+      font-weight: 200;
+      font-style: italic;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: #555;
+    }
+    /* Article number badge top left */
+    .article-number {
+      position: absolute;
+      top: 15px;
+      left: 15px;       
+      font-weight: 700;
+      font-size: 2rem;
+      color: #e94e1b;
+      user-select:none;
+    }
+    .csdvfgherdfvsdf li img{
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+    }
+    /* Article card with relative positioning for number */
+    .article-card {
+      position: relative;
+    }
+    /* Sidebar user image circle */
+    .sidebar-user-img {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #ddd;
+    }
+    /* Sidebar block spacing */
+    .sidebar-block {
+      margin-bottom: 2rem;
+    }
+    /* Video controls minimal style */
+    .video-controls button {
+      border: none;
+      background: transparent;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #333;
+      padding: 0 0.15rem;
+      user-select:none;
+    }
+    .video-controls button:hover, .video-controls button:focus {
+      color: #e94e1b;
+      outline: none;
+    }
