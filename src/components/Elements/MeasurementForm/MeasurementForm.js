@@ -3,8 +3,8 @@ import React, { useState } from "react";
 export const MeasurementForm = ({
   productDetails,
   showSizeModal,
-  setShowSizeModal,
   mssrmntSbmtConfrm,
+  setShowSizeModal,
   setMssrmntSbmtConfrm,
 }) => {
   const [activeGuide, setActiveGuide] = useState(null);
