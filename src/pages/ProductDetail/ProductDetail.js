@@ -262,7 +262,7 @@ export const ProductDetail = () => {
     setSelectedStitchOption(type);
   };
 
-  console.log(productDetails);
+  // console.log(productDetails);
 
   return (
     <>

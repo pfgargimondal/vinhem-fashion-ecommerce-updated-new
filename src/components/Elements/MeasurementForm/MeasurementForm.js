@@ -3,8 +3,8 @@ import React, { useState } from "react";
 export const MeasurementForm = ({
   productDetails,
   showSizeModal,
-  mssrmntSbmtConfrm,
   setShowSizeModal,
+  mssrmntSbmtConfrm,
   setMssrmntSbmtConfrm,
 }) => {
   const [activeGuide, setActiveGuide] = useState(null);
@@ -196,14 +196,14 @@ export const MeasurementForm = ({
     },
     {
       label: "Front Neck Depth",
-      key: "saree_front_neck_depth_option",
-      image: "saree_front_neck_depth",
+      key: "lehenga_front_neck_depth_option",
+      image: "lehenga_front_neck_depth",
       guide: "frontNeckDepth",
     },
     {
       label: "Back Neck Depth",
-      key: "saree_back_neck_depth_option",
-      image: "saree_back_neck_depth",
+      key: "lehenga_back_neck_depth_option",
+      image: "lehenga_back_neck_depth",
       guide: "backNeckDepth",
     },
     {
@@ -220,14 +220,14 @@ export const MeasurementForm = ({
     },
     {
       label: "Petticoat Waist (Inskirt)",
-      key: "saree_petticoat_waist_option",
-      image: "saree_petticoat_waist",
+      key: "lehenga_petticoat_waist_option",
+      image: "lehenga_petticoat_waist",
       guide: "petticoatWaist",
     },
     {
       label: "Petticoat Length (Inskirt)",
-      key: "saree_petticoat_length_option",
-      image: "saree_petticoat_length",
+      key: "lehenga_petticoat_length_option",
+      image: "lehenga_petticoat_length",
       guide: "petticoatLength",
     },
   ];
@@ -358,11 +358,10 @@ export const MeasurementForm = ({
     },
   ];
 
-
   const data = productDetails?.data?.mesurament_form_data;
 
-  if (productDetails?.data?.custom_feild_selectOption !== "generic")
-    return null;
+  // if (productDetails?.data?.custom_feild_selectOption !== "generic")
+  //   return null;
 
   const measurementFields = [
     { key: "generic_around_bust", label: "Around Bust" },
@@ -381,10 +380,8 @@ export const MeasurementForm = ({
     if (unit === "inch") {
       return data?.[`${prefix}_inch`]?.split(",") || [];
     } else if (data?.[`${prefix}_cm`]) {
-      // if cm values exist in DB
       return data?.[`${prefix}_cm`]?.split(",") || [];
     } else {
-      // convert inch → cm dynamically if cm not given
       return (
         data?.[`${prefix}_inch`]
           ?.split(",")
@@ -393,6 +390,7 @@ export const MeasurementForm = ({
     }
   };
 
+  // Helper: get options based on unit
   const getOptions = (key) => {
     const keyWithUnit = key.endsWith("_options") ? key : `${key}_${unit}`;
     const dataKey =
@@ -402,11 +400,8 @@ export const MeasurementForm = ({
     return dataKey ? dataKey.split(",").map((v) => v.trim()) : [];
   };
 
-
-
   return (
     <div>
-
       {showSizeModal && (
         <div className="customize-modal-backdrop position-fixed w-100 h-100"></div>
       )}
@@ -1160,11 +1155,13 @@ export const MeasurementForm = ({
                                         <option disabled selected>
                                           --Select Here--
                                         </option>
-                                        {getOptionsGeneric(field.key).map((val, i) => (
-                                          <option key={i} value={val.trim()}>
-                                            {val.trim()}
-                                          </option>
-                                        ))}
+                                        {getOptionsGeneric(field.key).map(
+                                          (val, i) => (
+                                            <option key={i} value={val.trim()}>
+                                              {val.trim()}
+                                            </option>
+                                          )
+                                        )}
                                       </select>
                                     </div>
                                   );
