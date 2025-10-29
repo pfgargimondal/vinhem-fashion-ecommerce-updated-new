@@ -126,7 +126,7 @@ export const Filter = () => {
     <div className="filter-wrapper pt-2">
       <div className="container-fluid">
         <div className="breadcrumb">
-          <ul className="ps-0">
+          <ul className="ps-0 mb-0">
             <li>
               <Link to="/">Home</Link>
             </li>
@@ -301,7 +301,7 @@ export const Filter = () => {
                                 </div>
                               )}
 
-                              {newIn && product?.new_arrival.toLowerCase() === "yes" && (
+                              {newIn && (product?.new_arrival === "1" || product?.new_arrival === true) && (
                                 <div className="nw-arrvl px-0">
                                   <span className="price"><i>NEW IN</i></span>
                                 </div>
@@ -380,7 +380,7 @@ export const Filter = () => {
                                   <h6><i class="bi me-1 bi-rocket-takeoff"></i> Ready to ship</h6>
                                 )}
 
-                                {product.best_seller.toLowerCase() === "yes" && (
+                                {(product.best_seller === '1' || product.best_seller === true) && (
                                   <h6><i class="bi bi-lightning-charge"></i> Best Seller</h6>
                                 )}                             
 

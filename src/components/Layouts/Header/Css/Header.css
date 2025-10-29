@@ -112,13 +112,14 @@ header .header-top .doewhruiwerwer_right ul li {
   display: flex;
   align-items: center;
   margin-inline: 0.15rem;
+  user-select: none;
 }
 header .header-top .doewhruiwerwer_right ul li.infrm-menu-divider {
   color: var(--text-lighter-gray-color);
   cursor: default;
 }
 .mjeimojwjikrrr{
-  width: 3rem;
+  width: 2.7rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -130,6 +131,10 @@ header .header-top .doewhruiwerwer_right ul li p {
 header .header-top .doewhruiwerwer_right ul li i {
   font-size: 1.3rem;
   line-height: 0;
+}
+.gbdfgtrfyhrytgrr i.sdfrrweewr_icon{
+  font-size: 1rem !important;
+  color: var(--light-black-text-color);
 }
 header .header-top .doewhruiwerwer_right ul li span {
   background: #000;
@@ -177,7 +182,7 @@ header .header-main .doiewhirw_right ul.header-menu li a {
   cursor: pointer;
 }
 .is-fixed-top{
-  height: 126px;
+  height: 110px;
 }
 .is-fixed-top .doiemwokjrmwewer{
   position: fixed;
@@ -235,7 +240,7 @@ header .header-main .swiper-slide a {
 }
 
 .header-mega-menu{
-  top: 67%;
+  top: 61%;
   left: 0;
   right: 0;
   z-index: -999;

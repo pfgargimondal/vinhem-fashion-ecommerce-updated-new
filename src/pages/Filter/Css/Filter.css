@@ -1,6 +1,5 @@
 .filter-wrapper .breadcrumb ul li {
   display: inline-block;
-  margin-right: 0.4rem;
   font-size: 0.9rem;
 }
 .filter-wrapper .breadcrumb ul li a {
@@ -8,11 +7,25 @@
 }
 .filter-wrapper .alosjdjkhrjfse h4 {
   font-size: 1.4rem;
+  font-weight: 400;
 }
 .filter-wrapper .alosjdjkhrjfse h4 span {
   color: var(--text-gray-color);
-  font-weight: 500;
+  font-weight: 400;
   font-size: 1rem;
+}
+.filter-wrapper .breadcrumb ul li:last-child a{
+  color: var(--light-black-text-color);
+}
+.oidenjwihrwer h6{
+  font-weight: 500;
+  transition: 0.2s ease-in-out;
+  font-size: 0.9rem;
+}
+.oidenjwihrwer h6:hover{
+  color: var(--black-background-color);
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
 }
 .filter-wrapper .dkewjriwehrnjhweijrwer .disenihrenjr {
   border-bottom: 1px solid var(--text-gray-color);
@@ -30,7 +43,13 @@
 .iduhweihriweurwerwer .btn-main{
   background: #fff !important;
   color: var(--black-background-color) !important;
-  border: 1px solid var(--text-gray-color) !important;
+  border: 1px solid var(--light-background-color) !important;
+  font-weight: 400;
+}
+
+.iduhweihriweurwerwer .btn-main:hover{
+  font-weight: 400;
+  border-radius: 5px;
 }
 
 .doiewjkrniuwewer.col-lg-3{
@@ -74,6 +93,13 @@
 
 .iduhweihriweurwerwer .btn-main i{
   font-size: 1.1rem;
+  color: var(--pink-main-color);
+  transition: 0.2s ease-in-out;
+}
+
+.iduhweihriweurwerwer .btn-main:hover i{
+  color: #fff;
+  transition: 0.2s ease-in-out;
 }
 
 .doewjkrnhweiurwer {
@@ -95,7 +121,7 @@
   box-sizing: border-box;
   cursor: pointer;
   display: flex;
-  padding: 0.5rem 0.75rem;
+  padding: 0.2rem 0.75rem;
   position: relative;
   scrollbar-width: thin !important;
 }
@@ -235,6 +261,15 @@
 .doewnkrhwer input:checked + label{
   background: var(--black-background-color) !important;
   color: #fff !important;
+}
+
+.doewnkrhwer input:checked + label i{
+  color: #fff !important;
+}
+
+.podwejorjwierwer .form-select{
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
 }
 
 .doewnkrhwersdvzdfb input:checked + label{

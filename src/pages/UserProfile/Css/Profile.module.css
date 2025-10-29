@@ -181,4 +181,10 @@ form input:global(.form-control){
   padding: 10px;
 }
 
+@media only screen and (max-width: 991px) {
+  .dfjhdsbfsdf p{
+    display: none;
+  }
+}
+
 /*end  profile settings  css   */

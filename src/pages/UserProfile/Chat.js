@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { UserProfileNavMenu } from "../../components";
 
 import styles from "./Css/Chat.module.css";
@@ -24,7 +25,7 @@ export const Chat = () => {
 
     return (
         <div className={styles.ffhfdf}>
-            <div className="ansjidnkuiweer container-fluid px-0">
+            <div className="ansjidnkuiweer">
                 <div className={styles.fbghdfg}>
                     <div className="row">
                         <div className="col-lg-3">
@@ -33,7 +34,7 @@ export const Chat = () => {
 
                         <div className="col-lg-9">
                             <div className={`${styles.fgcbdfgdf}`}>
-                                <div className={`${styles.alojdkmlkoljeirr} row border rounded shadow-sm`} style={{ height: "90vh" }}>
+                                <div className={`${styles.alojdkmlkoljeirr} row border border-start-0 rounded shadow-sm`} style={{ height: "90vh" }}>
                                     {/* Left Users Panel */}
                                     <div className="col-lg-3 border-end p-0">
                                         <div className="p-3 border-bottom fw-bold">Users</div>
@@ -71,8 +72,14 @@ export const Chat = () => {
 
                                     {/* Right Chat Panel */}
                                     <div className="col-lg-9 d-flex flex-column">
-                                        <div className="border-bottom p-3 fw-semibold">
+                                        <div className="border-bottom d-flex align-items-center justify-content-between p-3 fw-semibold">
                                             {selectedUser ? `Chat with ${selectedUser.name}` : "Please select a user to start chatting"}
+
+                                            <div className={`dowehrkjwerwer d-flex align-items-center justify-content-end`}>
+                                                <p className={`${styles.ndiwhermweoewrr} mb-0 me-3`}>
+                                                    <Link to="/"><i className="fa-solid me-1 fa-arrow-left" /> Back To Home <i className="fa-solid ms-1 fa-house" /></Link>
+                                                </p>
+                                            </div>
                                         </div>
 
                                         {/* Messages */}
@@ -89,7 +96,7 @@ export const Chat = () => {
                                                             }`}
                                                     >
                                                         <div
-                                                            className={`p-2 rounded ${msg.sender === "me" ? "bg-primary text-white" : "bg-secondary text-white"
+                                                            className={`p-2 rounded ${msg.sender === "me" ? `${styles.bg_pink} text-white` : "bg-secondary text-white"
                                                                 }`}
                                                         >
                                                             {msg.text}
@@ -100,7 +107,7 @@ export const Chat = () => {
                                         </div>
 
                                         {/* Input */}
-                                        <div className="d-flex border-top p-2">
+                                        <div className={`${styles.cdrgbghjjfgrfvrt} d-flex border-top p-2`}>
                                             <input
                                                 type="text"
                                                 className="form-control me-2"

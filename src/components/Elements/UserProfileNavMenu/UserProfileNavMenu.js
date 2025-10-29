@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import "./Css/UserProfileNavMenu.css";
 import "./Css/UserProfileNavMenuResponsive.css";
+import { useAuth } from "../../../context/AuthContext";
 
 export const UserProfileNavMenu = () => {
     const [resUsernavToggle, setResUsernavToggle] = useState(false);
@@ -20,6 +21,18 @@ export const UserProfileNavMenu = () => {
 
         bodyScrollFixed();
     }, [resUsernavToggle]);
+
+    const navigate = useNavigate();
+    const { dispatch } = useAuth(); 
+
+    const handleLogout = () => {
+
+        localStorage.removeItem("jwtToken");
+        localStorage.removeItem("user");
+
+        dispatch({ type: "LOGOUT" });
+        navigate("/login");
+    };
 
     return (
         <>
@@ -87,7 +100,7 @@ export const UserProfileNavMenu = () => {
                         </button>
                     </Link>
 
-                    <Link to="/profile">
+                    <Link onClick={handleLogout}>
                         <button className="btn akdhjkashriwerwer">
                             <i className="fa-solid fa-right-from-bracket"></i> Logout
                         </button>

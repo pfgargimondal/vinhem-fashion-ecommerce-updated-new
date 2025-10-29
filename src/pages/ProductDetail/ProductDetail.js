@@ -416,7 +416,7 @@ export const ProductDetail = () => {
                             {/* <div className="gbsdeeer dscnt-prce px-0">
                               <span className="price">30% OFF</span>
                             </div> */}
-                            {(productDetails?.data?.new_arrival?.toLowerCase() === "yes") && (
+                            {(productDetails?.data?.new_arrival === "1" || productDetails?.data?.new_arrival === true) && (
                               <div className="cffdrtrvwet nw-arrvl px-0">
                                   <div className="nw-arrvl px-0">
                                     <span className="price">New Arrival</span>
@@ -513,22 +513,26 @@ export const ProductDetail = () => {
                           </span></label>
                         </div>
 
-                        {productDetails?.data?.custom_fit?.toLowerCase() === 'yes' && (
-                          <div className="col-lg-4 col-md-6 col-sm-6 col-6 dowekrwerwer">
-                            <input type="radio" name="so" id="cf" className="d-none position-absolute" 
-                              checked={selectedStitchOption === "customFit"}
-                              onChange={() => handleStitchOptionChange("customFit")}/>
-                            <label htmlFor="cf" className="p-3" id="cstm-fit-btn">Custom-Fit <br /> 
-                            <span>+<i class="bi bi-currency-rupee"></i>{productDetails?.data?.extra_charges?.price}</span></label>
-                          </div>
+                        {productDetails?.data?.stitching_option !== 'Ready To Wear' && (
+                            productDetails?.data?.custom_fit?.toLowerCase() === 'yes' && (
+                              <div className="col-lg-4 col-md-6 col-sm-6 col-6 dowekrwerwer">
+                                <input type="radio" name="so" id="cf" className="d-none position-absolute" 
+                                  checked={selectedStitchOption === "customFit"}
+                                  onChange={() => handleStitchOptionChange("customFit")}/>
+                                <label htmlFor="cf" className="p-3" id="cstm-fit-btn">Custom-Fit <br /> 
+                                <span>+<i class="bi bi-currency-rupee"></i>{productDetails?.data?.extra_charges?.price}</span></label>
+                              </div>
+                            )
                         )}
                       </div>
-                      {productDetails?.data?.custom_fit?.toLowerCase() === 'yes' && (
-                        <div className="ikasdnjiknswjirhwer mb-4">
-                          <p className="mb-1">Submit Measurement: <span><Link to="" onClick={(e) => handleShowModal(e)}>CLICK HERE</Link></span> or <span><Link to="">Later</Link></span></p>
+                      {productDetails?.data?.stitching_option !== 'Ready To Wear' && (
+                          productDetails?.data?.custom_fit?.toLowerCase() === 'yes' && (
+                            <div className="ikasdnjiknswjirhwer mb-4">
+                              <p className="mb-1">Submit Measurement: <span><Link to="" onClick={(e) => handleShowModal(e)}>CLICK HERE</Link></span> or <span><Link to="">Later</Link></span></p>
 
-                          <p className="mb-0">+7 days, for your chosen stitching options.</p>
-                        </div>
+                              <p className="mb-0">+7 days, for your chosen stitching options.</p>
+                            </div>
+                          )
                       )}
 
                       {/* id="custmze-otft-btn"> */}
@@ -544,9 +548,18 @@ export const ProductDetail = () => {
                                 value={selectedSize}
                               >
                                 <option value="">Select Size</option>
-                                {productDetails?.data?.product_inventory?.map((productSizeVal) => (
-                                  <option key={productSizeVal.size_name} value={productSizeVal.size_name}>
-                                    {productSizeVal.size_name}
+                                {productDetails?.data?.product_allSize?.flatMap((item) => {
+                                  const sizes = [item.filter_size];
+
+                                  // Only include plus_sizes if not "0" and not empty
+                                  if (item.plus_sizes && item.plus_sizes !== "0") {
+                                    sizes.push(item.plus_sizes);
+                                  }
+
+                                  return sizes;
+                                }).map((size, index) => (
+                                  <option key={index} value={size}>
+                                    {size}
                                   </option>
                                 ))}
                               </select>
@@ -589,7 +602,8 @@ export const ProductDetail = () => {
 
                     </div>
 
-                    {productDetails?.data?.matching_turban === 'TRUE' && (
+
+                    {(productDetails?.data?.matching_turban === "1" || productDetails?.data?.matching_turban === true) && (
                       <div className="sadfvfghbrsd mt-4">
                         <div className="col-lg-12">
                           <div className="kcwenjkkwenkrhwer">
@@ -622,6 +636,90 @@ export const ProductDetail = () => {
                             <div className="slkdnfkmslkmr row align-items-center">
                               <div className="col-lg-8 col-md-8 col-sm-8 col-8">
                                 <select name="" className="form-select" id="" disabled={!isTurbanChecked}>
+                                  <option selected value="">Select size</option>
+                                  <option value="1">1</option>
+                                </select>
+                              </div>
+
+                              <div className="col-lg-4 col-md-4 col-sm-4 col-4">
+                                <p className="chrt-sze mb-0" onClick={() => setTurbanModal(!turbanModal)}><i class="fa-solid fa-maximize"></i> Size Chart</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {(productDetails?.data?.matching_stole === "1" || productDetails?.data?.matching_stole === true) && (
+                      <div className="sadfvfghbrsd mt-4">
+                        <div className="col-lg-12">
+                          <div className="kcwenjkkwenkrhwer">
+                            <div className="opjdjwerwer mb-3 row col-lg-9 align-items-center justify-content-between">
+                              <div className="doweriwejrwer col-lg-6 col-md-8 col-sm-8 col-8">
+                                <div class="checkbox-wrapper-33">
+                                  <label class="checkbox">
+                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" 
+                                        checked={isStoleChecked}
+                                        onChange={(e) => setIsStoleChecked(e.target.checked)}/>
+
+                                    <span class="checkbox__symbol">
+                                      <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 14l8 7L24 7"></path>
+                                      </svg>
+                                    </span>
+
+                                    <p class="checkbox__textwrapper">Matching Stole</p>
+                                  </label>
+                                </div>
+                              </div>
+
+                              <p className="chngd-price mb-0 col-lg-4 col-md-4 col-sm-4 col-4">
+                                <i class="bi bi-currency-rupee"></i>
+                                {productDetails?.data?.stole_charges
+                                    ? productDetails?.data?.stole_charges?.price
+                                    : "0.00"}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {(productDetails?.data?.matching_mojari === "1" || productDetails?.data?.matching_mojari === true) && (
+                      <div className="sadfvfghbrsd mt-4">
+                        <div className="col-lg-12">
+                          <div className="kcwenjkkwenkrhwer">
+                            <div className="opjdjwerwer mb-3 row col-lg-9 align-items-center justify-content-between">
+                              <div className="doweriwejrwer col-lg-8 col-md-8 col-sm-8 col-8">
+                                <div class="checkbox-wrapper-33">
+                                  <label class="checkbox">
+                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" checked={isMojriChecked}
+                                          onChange={() => setIsMojriChecked(!isMojriChecked)}/>
+
+                                    <span class="checkbox__symbol">
+                                      <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 14l8 7L24 7"></path>
+                                      </svg>
+                                    </span>
+
+                                    <p class="checkbox__textwrapper">Matching Mojri</p>
+                                  </label>
+                                </div>
+                              </div>
+
+                              <p className="chngd-price mb-0 col-lg-4 col-md-4 col-sm-4 col-4">
+                                <i class="bi bi-currency-rupee"></i>
+                                {productDetails?.data?.mojri_charges
+                                    ? productDetails?.data?.mojri_charges?.price
+                                    : "0.00"}
+                              </p>
+
+                              
+                            </div>
+
+                            <div className="slkdnfkmslkmr row align-items-center">
+                              <div className="col-lg-8 col-md-8 col-sm-8 col-8">
+                                <select name="" className="form-select" id="" disabled={!isMojriChecked}>
                                   <option value="" selected>Select Size</option>
                                     <option value="-- U.S. &amp; Canada ----" disabled="disabled" class="disableDdlItems">-- U.S. &amp; Canada ----</option>
                                     <option value="US Size 7.5">US Size 7.5</option>
@@ -669,93 +767,6 @@ export const ProductDetail = () => {
                                     <option value="AU Size 10.5">AU Size 10.5</option>
                                     <option value="AU Size 11.5">AU Size 11.5</option>
                                     <option value="AU Size 12.5">AU Size 12.5</option>
-                                </select>
-                              </div>
-
-                              <div className="col-lg-4 col-md-4 col-sm-4 col-4">
-                                <p className="chrt-sze mb-0" onClick={() => setTurbanModal(!turbanModal)}><i class="fa-solid fa-maximize"></i> Size Chart</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {productDetails?.data?.matching_stole === 'TRUE' && (
-                      <div className="sadfvfghbrsd mt-4">
-                        <div className="col-lg-12">
-                          <div className="kcwenjkkwenkrhwer">
-                            <div className="opjdjwerwer mb-3 row col-lg-9 align-items-center justify-content-between">
-                              <div className="doweriwejrwer col-lg-6 col-md-8 col-sm-8 col-8">
-                                <div class="checkbox-wrapper-33">
-                                  <label class="checkbox">
-                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" 
-                                        checked={isStoleChecked}
-                                        onChange={(e) => setIsStoleChecked(e.target.checked)}/>
-
-                                    <span class="checkbox__symbol">
-                                      <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M4 14l8 7L24 7"></path>
-                                      </svg>
-                                    </span>
-
-                                    <p class="checkbox__textwrapper">Matching Stole</p>
-                                  </label>
-                                </div>
-                              </div>
-
-                              <p className="chngd-price mb-0 col-lg-4 col-md-4 col-sm-4 col-4">
-                                <i class="bi bi-currency-rupee"></i>
-                                {productDetails?.data?.stole_charges
-                                    ? productDetails?.data?.stole_charges?.price
-                                    : "0.00"}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {productDetails?.data?.matching_mojari === 'TRUE' && (
-                      <div className="sadfvfghbrsd mt-4">
-                        <div className="col-lg-12">
-                          <div className="kcwenjkkwenkrhwer">
-                            <div className="opjdjwerwer mb-3 row col-lg-9 align-items-center justify-content-between">
-                              <div className="doweriwejrwer col-lg-8 col-md-8 col-sm-8 col-8">
-                                <div class="checkbox-wrapper-33">
-                                  <label class="checkbox">
-                                    <input class="checkbox__trigger visuallyhidden" type="checkbox" checked={isMojriChecked}
-                                          onChange={() => setIsMojriChecked(!isMojriChecked)}/>
-
-                                    <span class="checkbox__symbol">
-                                      <svg aria-hidden="true" class="icon-checkbox" width="28px" height="28px" viewBox="0 0 28 28" version="1" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M4 14l8 7L24 7"></path>
-                                      </svg>
-                                    </span>
-
-                                    <p class="checkbox__textwrapper">Matching Mojri</p>
-                                  </label>
-                                </div>
-                              </div>
-
-                              <p className="chngd-price mb-0 col-lg-4 col-md-4 col-sm-4 col-4">
-                                <i class="bi bi-currency-rupee"></i>
-                                {productDetails?.data?.mojri_charges
-                                    ? productDetails?.data?.mojri_charges?.price
-                                    : "0.00"}
-                              </p>
-
-                              
-                            </div>
-
-                            <div className="slkdnfkmslkmr row align-items-center">
-                              <div className="col-lg-8 col-md-8 col-sm-8 col-8">
-                                <select name="" className="form-select" id="" disabled={!isMojriChecked}>
-                                  <option value="" disabled selected>Select Size</option>
-                                  {productDetails?.data?.turban_sizeDetails?.map((turban_sizeVal) => (
-                                    <option key={turban_sizeVal.size} value={turban_sizeVal.size}>{turban_sizeVal.size}</option>
-                                  ))}
-                                  
                                 </select>
                               </div>
 
@@ -819,12 +830,12 @@ export const ProductDetail = () => {
                         <div className="col-lg-6">
                           <ul className="mb-0 ps-0">
                             <li>
-                              {productDetails?.data?.non_returnable?.toLowerCase() === 'no' ? (
-                                <i className="bi me-1 bi-x-circle" style={{ color: 'red' }}></i>
-                              ) : (
-                                <i className="bi me-1 bi-check2-circle"></i>
+                              {productDetails?.data?.non_returnable !== '' && (
+                                <>
+                                  <i className="bi me-1 bi-check2-circle"></i>
+                                  {productDetails?.data?.non_returnable}
+                                </>
                               )}
-                              Non-returnable/non-exchangeable
                             </li>
                           </ul>
                         </div>
@@ -832,38 +843,39 @@ export const ProductDetail = () => {
                         <div className="col-lg-6">
                           <ul className="mb-0 ps-0">
                             <li>
-                              {productDetails?.data?.premium_quality?.toLowerCase() === 'no' ? (
-                                <i className="bi me-1 bi-x-circle" style={{ color: 'red' }}></i>
-                              ) : (
-                                <i className="bi me-1 bi-check2-circle"></i>
-                              )} Premium
-                              Quality
-                            </li>
-                          </ul>
-                        </div>
-
-                        <div className="col-lg-6">
-                          <ul className="mb-0 ps-0">
-                            <li>
-                              {productDetails?.data?.free_shipping?.toLowerCase() === 'no' ? (
-                                <i className="bi me-1 bi-x-circle" style={{ color: 'red' }}></i>
-                              ) : (
-                                <i className="bi me-1 bi-check2-circle"></i>
-                              )} Free
-                              Shipping
-                            </li>
-                          </ul>
-                        </div>
-
-                        <div className="col-lg-6">
-                          <ul className="mb-0 ps-0">
-                            <li>
-                              {productDetails?.data?.personalized_styling?.toLowerCase() === 'no' ? (
-                                <i className="bi me-1 bi-x-circle" style={{ color: 'red' }}></i>
-                              ) : (
-                                <i className="bi me-1 bi-check2-circle"></i>
+                              {productDetails?.data?.premium_quality !== '' && (
+                                <>
+                                  <i className="bi me-1 bi-check2-circle"></i>
+                                  {productDetails?.data?.premium_quality}
+                                </>
                               )}
-                              Personalized Styling
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="col-lg-6">
+                          <ul className="mb-0 ps-0">
+                            <li>
+                              {productDetails?.data?.free_shipping !== '' && (
+                                <>
+                                  <i className="bi me-1 bi-check2-circle"></i>
+                                  {productDetails?.data?.free_shipping}
+                                </>
+                              )}
+                            </li>
+                          </ul>
+                        </div>
+
+                        <div className="col-lg-6">
+                          <ul className="mb-0 ps-0">
+                            <li>
+                              {productDetails?.data?.personalized_styling !== '' && (
+                                <>
+                                  <i className="bi me-1 bi-check2-circle"></i>
+                                  {productDetails?.data?.personalized_styling}
+                                </>
+                              )}
+                              
                             </li>
                           </ul>
                         </div>
@@ -960,14 +972,16 @@ export const ProductDetail = () => {
                             <div className="row">
                               <div className="col-lg-6 mb-4">
                                 <div className="idnewihrwer_inner">
-                                  {productDetails?.data?.no_of_component !== null && (
+                                  {productDetails?.data?.no_of_component !== null && 
+                                    productDetails?.data?.no_of_component !== "0" && (
                                     <div className="odjjkwehrihwerewr mb-4">
                                       <p>
                                         No of Component <br /> <span>{productDetails?.data?.no_of_component}</span>
                                       </p>
                                     </div>
                                   )}
-                                  {productDetails?.data?.type_of_work !== null && (
+                                  {productDetails?.data?.type_of_work !== null && 
+                                    productDetails?.data?.type_of_work !== "0" && (
                                     <div className="odjjkwehrihwerewr mb-4">
                                       <p>
                                         Type of Work <br /> <span>{productDetails?.data?.type_of_work}</span>
@@ -975,7 +989,8 @@ export const ProductDetail = () => {
                                     </div>
                                   )}
                            
-                                  {productDetails?.data?.color !== null && (
+                                  {productDetails?.data?.color !== null && 
+                                    productDetails?.data?.color !== "0" && (
                                     <div className="odjjkwehrihwerewr mb-4">
                                       <p>
                                         Color <br /> <span>{productDetails?.data?.color}</span>
@@ -983,18 +998,18 @@ export const ProductDetail = () => {
                                     </div>
                                   )}
 
-                                  {productDetails?.data?.dupatta_color !== null && (
-                                    <div className="odjjkwehrihwerewr mb-4">
-                                      <p>
-                                        Dupatta Color <br />
-                                        <span>
-                                          {productDetails?.data?.dupatta_color}
-                                        </span>
-                                      </p>
-                                    </div>
+                                  {productDetails?.data?.dupatta_color !== null &&
+                                    productDetails?.data?.dupatta_color !== "0" && ( // optional: also check empty string
+                                      <div className="odjjkwehrihwerewr mb-4">
+                                        <p>
+                                          Dupatta Color <br />
+                                          <span>{productDetails?.data?.dupatta_color}</span>
+                                        </p>
+                                      </div>
                                   )}
 
-                                  {productDetails?.data?.jacket_color !== null && (
+                                  {productDetails?.data?.jacket_color !== null && 
+                                    productDetails?.data?.jacket_color !== "0" && (
                                     <div className="odjjkwehrihwerewr mb-4">
                                       <p>
                                         Jacket Color <br />
@@ -1005,7 +1020,8 @@ export const ProductDetail = () => {
                                     </div>
                                   )}
 
-                                  {productDetails?.data?.bottom_closure !== null && (
+                                  {productDetails?.data?.bottom_closure !== null && 
+                                    productDetails?.data?.bottom_closure !== "0" && (
                                     <div className="odjjkwehrihwerewr mb-4">
                                       <p>
                                         Bottom Closure <br />
@@ -1016,18 +1032,8 @@ export const ProductDetail = () => {
                                     </div>
                                   )}
 
-                                  {productDetails?.data?.bottom_closure !== null && (
-                                    <div className="odjjkwehrihwerewr mb-4">
-                                      <p>
-                                        Bottom Closure <br />
-                                        <span>
-                                          {productDetails?.data?.bottom_closure}
-                                        </span>
-                                      </p>
-                                    </div>
-                                  )}
-
-                                  {productDetails?.data?.inner_lining !== null && (
+                                  {productDetails?.data?.inner_lining !== null && 
+                                    productDetails?.data?.inner_lining !== "0" && (
                                     <div className="odjjkwehrihwerewr mb-4">
                                       <p>
                                         Inner Lining <br />
@@ -1038,7 +1044,8 @@ export const ProductDetail = () => {
                                     </div>
                                   )}
 
-                                  {productDetails?.data?.weight !== null && (
+                                  {productDetails?.data?.weight !== null && 
+                                    productDetails?.data?.weight !== "0" && (
                                     <div className="odjjkwehrihwerewr mb-4">
                                       <p>
                                         Weight Details <br />
@@ -1055,7 +1062,8 @@ export const ProductDetail = () => {
 
                               <div className="col-lg-6 mb-4">
                                 <div className="idnewihrwer_inner">
-                                  {productDetails?.data?.component !== null && (
+                                  {productDetails?.data?.component !== null && 
+                                    productDetails?.data?.component !== "0" && (
                                     <div className="odjjkwehrihwerewr mb-4">
                                       <p>
                                         Components <br /> <span>{productDetails?.data?.component}</span>
@@ -1063,7 +1071,8 @@ export const ProductDetail = () => {
                                     </div>
                                   )}
 
-                                  {productDetails?.data?.occasion !== null && (
+                                  {productDetails?.data?.occasion !== null && 
+                                    productDetails?.data?.occasion !== "0" && (
                                     <div className="odjjkwehrihwerewr mb-4">
                                       <p>
                                         Occasions <br /> <span>Suitable for {productDetails?.data?.occasion}</span>
@@ -1071,7 +1080,8 @@ export const ProductDetail = () => {
                                     </div>
                                   )}
 
-                                  {productDetails?.data?.celebrity !== null && (
+                                  {productDetails?.data?.celebrity !== null && 
+                                    productDetails?.data?.celebrity !== "0" && (
                                     <div className="odjjkwehrihwerewr mb-4">
                                       <p>
                                         Celebrity <br /> <span>{productDetails?.data?.celebrity}</span>
@@ -1079,7 +1089,8 @@ export const ProductDetail = () => {
                                     </div>
                                   )}
 
-                                  {productDetails?.data?.pattern !== null && (
+                                  {productDetails?.data?.pattern !== null && 
+                                    productDetails?.data?.pattern !== "0" && (
                                     <div className="odjjkwehrihwerewr mb-4">
                                       <p>
                                         Pattern <br /> <span>{productDetails?.data?.pattern}</span>
@@ -1087,15 +1098,17 @@ export const ProductDetail = () => {
                                     </div>
                                   )}
 
-                                  {productDetails?.data?.fabric !== null && (
+                                  {productDetails?.data?.fabric !== null && 
+                                    productDetails?.data?.fabric !== "0" && (
                                     <div className="odjjkwehrihwerewr mb-4">
                                       <p>
-                                        Fabric <br /> <span>{productDetails?.data?.fabric}</span>
+                                        Material <br /> <span>{productDetails?.data?.fabric}</span>
                                       </p>
                                     </div>
                                   )}
 
-                                  {productDetails?.data?.fit_type !== null && (
+                                  {productDetails?.data?.fit_type !== null && 
+                                   productDetails?.data?.fit_type !== "0" && (
                                     <div className="odjjkwehrihwerewr mb-4">
                                       <p>
                                         Fit <br /> <span>Fit: {productDetails?.data?.fit_type}</span>
@@ -1103,7 +1116,8 @@ export const ProductDetail = () => {
                                     </div>
                                   )}
 
-                                  {productDetails?.data?.care_instruction !== null && (
+                                  {productDetails?.data?.care_instruction !== null && 
+                                    productDetails?.data?.care_instruction !== "0" && (
                                     <div className="odjjkwehrihwerewr mb-4">
                                       <p>
                                         Care Instruction <br /> <span> {productDetails?.data?.care_instruction}</span>

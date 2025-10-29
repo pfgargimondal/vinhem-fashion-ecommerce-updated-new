@@ -126,7 +126,7 @@ const handleCancelOrder = async (order) => {
 
     return (
         <div className={styles.ffhfdf}>
-            <div className="ansjidnkuiweer container-fluid px-0">
+            <div className="ansjidnkuiweer">
                 <div className={styles.fbghdfg}>
                     <div className="row">
                         <div className="col-lg-3">
@@ -185,7 +185,7 @@ const handleCancelOrder = async (order) => {
                                                                 <button className="btn border-0 px-0 text-muted">
                                                                     <i className="bi me-1 bi-folder-x"></i> Cancellation Not Available
                                                                 </button>
-                                                                ) : orderHistoryVal.order_status === "Deliverd" ? (
+                                                                ) : orderHistoryVal.order_status === "Delivered" ? (
                                                                 <button className={`btn ${styles.return_ordr} border-0 px-0`}>
                                                                     <i className="bi me-1 bi-folder-x"></i> Return Order
                                                                 </button>
@@ -198,7 +198,7 @@ const handleCancelOrder = async (order) => {
                                                                     <i className="bi me-1 bi-folder-x"></i> Cancellation Not Available
                                                                 </button>
                                                                 )}
-                                                                {orderHistoryVal.order_status === "Deliverd" && (
+                                                                {orderHistoryVal.order_status === "Delivered" && (
                                                                     <button className={`btn ${styles.dwnld_invce} text-success border-0 px-0`} onClick={() => handleDownload(orderHistoryVal)}>
                                                                         <i class="bi me-1 bi-file-earmark-arrow-down"></i> Download Invoice</button>
                                                                 )}

@@ -163,6 +163,23 @@ form input:global(.form-control){
     overflow-y: auto;
 }
 
+.ldknwejknlkkekrrr .bg_pink{
+  background: var(--pink-main-color);
+}
+
+.cdrgbghjjfgrfvrt input:global(.form-control){
+  border: 1px solid var(--text-gray-color);
+  border-radius: 3px;
+}
+
+.ndiwhermweoewrr i:global(.fa-house){
+  color: var(--pink-main-color);
+}
+
+.ndiwhermweoewrr{
+  font-weight: 500;
+}
+
 @media only screen and (max-width: 991px){
   .diewnrnwekhriwejrwejr{
     display: flex;
@@ -184,6 +201,10 @@ form input:global(.form-control){
 
   .ldknwejknlkkekrrr{
     height: 45vh;
+  }
+
+  .ndiwhermweoewrr{
+    display: none;
   }
 }
 

@@ -33,7 +33,7 @@ export const Wishlist = () => {
 
     return (
         <div className={styles.ffhfdf}>
-            <div className="ansjidnkuiweer container-fluid px-0">
+            <div className="ansjidnkuiweer">
                 <div className={styles.fbghdfg}>
                     <div className="row">
                         <div className="col-lg-3">

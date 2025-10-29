@@ -198,7 +198,7 @@ export const FilterProvider = ({children}) => {
         } else if (state.sortBy === "HIGH_TO_LOW") {
             return products.sort((a, b) => b.selling_price - a.selling_price);
         } else if (state.sortBy === "NEW_ARRIVALS") {
-            return products.filter(product => product.new_arrival === "Yes");
+            return products.filter(product => product.new_arrival === "1" || product?.new_arrival === true);
         } else if (state.sortBy === "DISCOUNT_LOW_TO_HIGH") {
             return products.sort((a, b) => a.discount - b.discount);
         } else {
@@ -219,7 +219,7 @@ export const FilterProvider = ({children}) => {
     }
 
     function filterNewArrival(products) {
-        return state.newIn ? products.filter(product => product?.new_arrival?.toString().trim().toLowerCase() === "yes") : products;
+        return state.newIn ? products.filter(product => product.new_arrival === "1" || product?.new_arrival === true) : products;
     }
 
 

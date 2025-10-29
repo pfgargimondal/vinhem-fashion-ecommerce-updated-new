@@ -1,6 +1,6 @@
   // eslint-disable-next-line
 import { useEffect, useRef, useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import Form from 'react-bootstrap/Form';
 import { SwiperSlide } from 'swiper/react';
 import { useAuth } from "../../../context/AuthContext";
@@ -23,6 +23,7 @@ export const Header = ({ shouldHideHeader, shouldHideFullHeaderFooterRoutes }) =
   const { cartCount } = useCart();
   const { wishlistCount } = useWishlist();
   const { selectedCurrency, setSelectedCurrency } = useCurrency();
+  const pathName = useLocation().pathname;
   const navigate = useNavigate();
   const searchRef = useRef(null);
 
@@ -95,6 +96,12 @@ export const Header = ({ shouldHideHeader, shouldHideFullHeaderFooterRoutes }) =
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+
+  useEffect(() => {
+    setUserDropdown(false);
+  }, [pathName]);
+
+
   return (
     <>
       { !shouldHideFullHeaderFooterRoutes && (
@@ -140,7 +147,7 @@ export const Header = ({ shouldHideHeader, shouldHideFullHeaderFooterRoutes }) =
           <div className={`header-sticky-wrapper ${isSticky ? "is-fixed-top" : ""} ${shouldHideHeader ? "d-none" : ""}`}>
             <div className="doiemwokjrmwewer w-100">
               { !shouldHideHeader && (
-              <div className="header-top py-2">
+              <div className="header-top py-1">
                 <div className="container-fluid">
                   <div className="row align-items-center">
                     <div className="col-lg-2">
@@ -232,7 +239,14 @@ export const Header = ({ shouldHideHeader, shouldHideFullHeaderFooterRoutes }) =
                             <li className="position-relative">
                             {user ? (
                               <>
-                                <i className="bi bi-person" onClick={() => setUserDropdown(!userDropdown)}></i> <div className="mjeimojwjikrrr">{user.name}</div>
+                                <div className="gbdfgtrfyhrytgrr d-flex align-items-center" onClick={() => setUserDropdown(!userDropdown)}>
+                                  <i className="bi bi-person"></i>
+                                  
+                                  <div className="mjeimojwjikrrr">{user.name}</div>
+
+                                  <i class={`fa-solid sdfrrweewr_icon ${userDropdown ? "fa-caret-up" : "fa-caret-down"}`}></i>
+                                </div>
+
                                 {userDropdown && <DropdownLoggedIn />}
                               </>
                             ) : (
@@ -250,7 +264,7 @@ export const Header = ({ shouldHideHeader, shouldHideFullHeaderFooterRoutes }) =
               ) }
 
               { !shouldHideHeader && (
-              <div className="header-main bg-white py-2 position-relative">       
+              <div className="header-main bg-white py-1 position-relative">       
                 <div className="header-main-wrapper">
                     {mainCategory?.map((category) => (
                     <SwiperSlide key={category.id}>

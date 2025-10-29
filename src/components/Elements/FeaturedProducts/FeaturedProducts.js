@@ -31,7 +31,7 @@ export const FeaturedProducts = ({ featuredProduct }) => {
                   </div>
                 )} */}
 
-                {(featuredProduct?.new_arrival?.toLowerCase() === "yes") && (
+                {(featuredProduct?.new_arrival === '1' || featuredProduct?.new_arrival === true) && (
                   <div className="nw-arrvl px-0">
                     <span className="price"><i>NEW IN</i></span>
                   </div>
@@ -110,7 +110,7 @@ export const FeaturedProducts = ({ featuredProduct }) => {
                     <h6><i class="bi me-1 bi-rocket-takeoff"></i> Ready to ship</h6>
                   )}
 
-                  {featuredProduct?.best_seller?.toLowerCase() === "yes" && (
+                  {(featuredProduct?.best_seller === '1' || featuredProduct?.best_seller === true) && (
                     <h6><i class="bi bi-lightning-charge"></i> Best Seller</h6>
                   )}                             
 

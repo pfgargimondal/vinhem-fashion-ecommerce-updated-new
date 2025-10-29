@@ -4,6 +4,10 @@
         align-items: center;
     }
 
+    .hdkgdfg.sticky-top{
+        top: 2% !important;
+    }
+
     .hdkgdfg{
         position: fixed !important;
         width: 75%;
@@ -23,6 +27,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        padding-inline: 0.9rem;
     }
 
     .dokejrlwerwer.d-none{

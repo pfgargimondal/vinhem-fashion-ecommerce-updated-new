@@ -125,7 +125,7 @@ export const Profile = () => {
 
 
   return (
-    <div className="container-fluid px-0">
+    <div className="sdfgtrfegrgtrg">
       <div className={styles.ffhfdf}>
         <div className={styles.fbghdfg}>
           <div className="row">
