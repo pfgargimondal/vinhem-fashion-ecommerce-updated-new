@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation, Mousewheel } from "swiper/modules";
@@ -74,19 +74,12 @@ export const ProductDetail = () => {
   }, [slug]);
 
 
-  
-
-
-  
-  
-
   // eslint-disable-next-line
   const [activeTab, setActiveTab] = useState("tab-1");
   
   const [showSizeModal, setShowSizeModal] = useState(false);
   const [mssrmntSbmtConfrm, setMssrmntSbmtConfrm] = useState(null);
 
-  
 
   //featured products
 
@@ -199,49 +192,74 @@ export const ProductDetail = () => {
   };
 
 
-
   const [selectedSize, setSelectedSize] = useState("");
-  const [selectedStitchOption, setSelectedStitchOption] = useState(""); // dynamic
+  const [availableQty, setAvailableQty] = useState(0);
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [selectedPrice, setSelectedPrice] = useState(0);
+  const [finalPrice, setFinalPrice] = useState(0);
+
+  const [selectedStitchOption, setSelectedStitchOption] = useState("");
   const [isTurbanChecked, setIsTurbanChecked] = useState(false);
   const [isMojriChecked, setIsMojriChecked] = useState(false);
   const [isStoleChecked, setIsStoleChecked] = useState(false);
-  const [finalPrice, setFinalPrice] = useState(
-    parseFloat(productDetails?.data?.selling_price || 0)
-  );
 
-  const handleSizeChange = (e) => setSelectedSize(e.target.value);
+  // ------------------------------
+  // Handle size change
+  // ------------------------------
+  const handleSizeChange = (e) => {
+    const newSize = e.target.value;
+    setSelectedSize(newSize);
 
-  useEffect(() => {
+    // Find the selected size row
     const selectedInventory =
-      productDetails?.data?.product_inventory?.find(
-        (item) => item.size_name === selectedSize
+      productDetails?.data?.product_allSize?.find(
+        (item) =>
+          item.filter_size === newSize || item.plus_sizes === newSize
       ) || {};
 
-    const basePrice = parseFloat(
-      selectedInventory.selling_price ||
+    // Set available quantity
+    const newQty = Number(selectedInventory?.rts_quantity || 0);
+    setAvailableQty(newQty);
+
+    if (selectedQuantity > newQty) {
+      setSelectedQuantity(1);
+    }
+
+    // Determine final size price logic
+    let finalPrice = 0;
+
+    const sellingPrice = parseFloat(
+      selectedInventory?.selling_price ||
         productDetails?.data?.selling_price ||
         0
     );
 
-    const stitchingCharge = parseFloat(
-      productDetails?.data?.stiching_charges?.price || 0
-    );
-    const customFitCharge = parseFloat(
-      productDetails?.data?.extra_charges?.price || 0
-    );
-    const turbanPrice = parseFloat(
-      productDetails?.data?.turban_charges?.price || 0
-    );
-    const mojriPrice = parseFloat(
-      productDetails?.data?.mojri_charges?.price || 0
-    );
-    const stolePrice = parseFloat(
-      productDetails?.data?.stole_charges?.price || 0
-    );
+    const plusCharge = parseFloat(selectedInventory?.plus_sizes_charges || 0);
 
-    let total = basePrice;
+    // ✅ Logic:
+    // - If user selected a plus size and it has a charge > 0 → show only that charge
+    // - Else → show normal selling price
+    if (selectedInventory?.plus_sizes === newSize && plusCharge > 0) {
+      finalPrice = plusCharge;
+    } else {
+      finalPrice = sellingPrice;
+    }
 
-    // Add based on user selections
+    setSelectedPrice(finalPrice);
+  };
+
+  // ------------------------------
+  // Calculate total price dynamically
+  // ------------------------------
+  useEffect(() => {
+    let total = parseFloat(selectedPrice || productDetails?.data?.selling_price || 0);
+
+    const stitchingCharge = parseFloat(productDetails?.data?.stiching_charges?.price || 0);
+    const customFitCharge = parseFloat(productDetails?.data?.extra_charges?.price || 0);
+    const turbanPrice = parseFloat(productDetails?.data?.turban_charges?.price || 0);
+    const mojriPrice = parseFloat(productDetails?.data?.mojri_charges?.price || 0);
+    const stolePrice = parseFloat(productDetails?.data?.stole_charges?.price || 0);
+
     if (selectedStitchOption === "stitch") total += stitchingCharge;
     if (selectedStitchOption === "customFit") total += customFitCharge;
     if (isTurbanChecked) total += turbanPrice;
@@ -250,7 +268,9 @@ export const ProductDetail = () => {
 
     setFinalPrice(total);
   }, [
+    selectedPrice,
     selectedSize,
+    selectedQuantity,
     selectedStitchOption,
     isTurbanChecked,
     isMojriChecked,
@@ -258,6 +278,9 @@ export const ProductDetail = () => {
     productDetails,
   ]);
 
+  // ------------------------------
+  // Handle stitch option
+  // ------------------------------
   const handleStitchOptionChange = (type) => {
     setSelectedStitchOption(type);
   };
@@ -548,22 +571,20 @@ export const ProductDetail = () => {
                                 value={selectedSize}
                               >
                                 <option value="">Select Size</option>
-                                {productDetails?.data?.product_allSize?.flatMap((item) => {
-                                  const sizes = [item.filter_size];
-
-                                  // Only include plus_sizes if not "0" and not empty
-                                  if (item.plus_sizes && item.plus_sizes !== "0") {
-                                    sizes.push(item.plus_sizes);
-                                  }
-
-                                  return sizes;
-                                }).map((size, index) => (
-                                  <option key={index} value={size}>
-                                    {size}
-                                  </option>
+                                {productDetails?.data?.product_allSize?.map((item, index) => (
+                                  <React.Fragment key={index}>
+                                    <option value={item.filter_size}>{item.filter_size}</option>
+                                    {item.plus_sizes && item.plus_sizes !== "0" && (
+                                      <option value={item.plus_sizes}>
+                                        {item.plus_sizes} 
+                                        {item.plus_sizes_charges > 0
+                                          ? ` (₹${item.plus_sizes_charges})`
+                                          : ""}
+                                      </option>
+                                    )}
+                                  </React.Fragment>
                                 ))}
                               </select>
-
                             <p className="mt-2">
                               {productDetails?.data?.rts_quantity <= 5 && (
                                 <>Only few left</>
@@ -584,20 +605,22 @@ export const ProductDetail = () => {
                       <label htmlFor="" className="me-1">
                         Qty:
                       </label>
-                      <select name="product_quantity" id="product_quantity"
-                        >
-                          {Array.from(
-                            {
-                              length: Number(
-                                productDetails?.data?.rts_quantity
-                              ),
-                            },
-                            (_, i) => (
-                              <option key={i + 1} value={i + 1}>
-                                {i + 1}
-                              </option>
-                            )
-                          )}
+                      <select
+                        name="product_quantity"
+                        id="product_quantity"
+                        value={selectedQuantity}
+                        onChange={(e) => setSelectedQuantity(Number(e.target.value))}
+                        disabled={!availableQty}
+                      >
+                        {availableQty > 0 ? (
+                          Array.from({ length: availableQty }, (_, i) => (
+                            <option key={i + 1} value={i + 1}>
+                              {i + 1}
+                            </option>
+                          ))
+                        ) : (
+                          <option value="">Select Size First</option>
+                        )}
                       </select>
 
                     </div>
@@ -1179,6 +1202,12 @@ export const ProductDetail = () => {
                         <Link to="/return-policy">More Details</Link>
                       </p>
                     </div>
+
+                    <h6>
+                      Manufactured/Packed & Marketed By- <br/>
+                      VinHem Fashion Pvt Ltd, Assembled in india
+                    </h6>
+
                   </div>
                 </div>
 
