@@ -396,9 +396,9 @@ export const Header = ({ shouldHideHeader, shouldHideFullHeaderFooterRoutes }) =
 
                               <div className="col-lg-4">
                                 <div className="ojkmiweee_right">
-                                  <div className="row">
+                                  <div className="row flex-nowrap">
                                     {category.mainCategory_banner?.map((CategoryBanner) => (
-                                      <div className="col-lg-6" key={CategoryBanner.id}>
+                                      <div className="col-6" key={CategoryBanner.id}>
                                         <div className="pkopkerrwer text-center">
                                           <img src={`${CategoryBanner.category_bannerImage_url}/${CategoryBanner.category_bannerImage}`} className="w-100" alt="" />
                                           <div className="dkewbjnrkwejrwer mt-2">

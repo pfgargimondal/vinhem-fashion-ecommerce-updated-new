@@ -203,6 +203,12 @@ export const ProductDetail = () => {
   const [isMojriChecked, setIsMojriChecked] = useState(false);
   const [isStoleChecked, setIsStoleChecked] = useState(false);
 
+  useEffect(() => {
+    if (productDetails?.data?.mto_quantity) {
+      setAvailableQty(productDetails.data.mto_quantity);
+    }
+  }, [productDetails]);
+
   // ------------------------------
   // Handle size change
   // ------------------------------
@@ -217,8 +223,9 @@ export const ProductDetail = () => {
           item.filter_size === newSize || item.plus_sizes === newSize
       ) || {};
 
-    // Set available quantity
-    const newQty = Number(selectedInventory?.rts_quantity || 0);
+    const newQty = Number(
+      selectedInventory?.mto_quantity || productDetails?.data?.mto_quantity || 0
+    );
     setAvailableQty(newQty);
 
     if (selectedQuantity > newQty) {
@@ -248,12 +255,44 @@ export const ProductDetail = () => {
     setSelectedPrice(finalPrice);
   };
 
+  const handleQuantitySelect = (qty) => {
+    setSelectedQuantity(qty);
+
+    // Recalculate final price when quantity changes
+    const basePrice =
+      parseFloat(selectedPrice || productDetails?.data?.selling_price || 0);
+
+    let total = basePrice * qty;
+
+    // Optional addon charges
+    const stitchingCharge = parseFloat(
+      productDetails?.data?.stiching_charges?.price || 0
+    );
+    const customFitCharge = parseFloat(
+      productDetails?.data?.extra_charges?.price || 0
+    );
+    const turbanPrice = parseFloat(productDetails?.data?.turban_charges?.price || 0);
+    const mojriPrice = parseFloat(productDetails?.data?.mojri_charges?.price || 0);
+    const stolePrice = parseFloat(productDetails?.data?.stole_charges?.price || 0);
+
+    // Add optional selections if chosen
+    if (selectedStitchOption === "stitch") total += stitchingCharge;
+    if (selectedStitchOption === "customFit") total += customFitCharge;
+    if (isTurbanChecked) total += turbanPrice;
+    if (isMojriChecked) total += mojriPrice;
+    if (isStoleChecked) total += stolePrice;
+
+    setFinalPrice(total);
+  };
 
   // ------------------------------
   // Calculate total price dynamically
   // ------------------------------
   useEffect(() => {
-    let total = parseFloat(selectedPrice || productDetails?.data?.selling_price || 0);
+
+    let total =
+    parseFloat(selectedPrice || productDetails?.data?.selling_price || 0) *
+    selectedQuantity;
 
     const stitchingCharge = parseFloat(productDetails?.data?.stiching_charges?.price || 0);
     const customFitCharge = parseFloat(productDetails?.data?.extra_charges?.price || 0);
@@ -286,7 +325,104 @@ export const ProductDetail = () => {
     setSelectedStitchOption(type);
   };
 
-  // console.log(productDetails);
+ const handleAddToCart = async () => {
+  // const hasSizes = productDetails?.data?.product_allSize?.length > 0;
+
+  // // ✅ 1. Validate main size
+  // if (hasSizes && !selectedSize) {
+  //   alert("Please select a size before adding to cart.");
+  //   return;
+  // }
+
+  // ✅ 2. Validate accessory sizes (if selected)
+  const turbanSize = document.getElementById("product_turbanSize")?.value || "";
+  const mojriSize = document.getElementById("product_mojriSize")?.value || "";
+
+  if (isTurbanChecked && !turbanSize) {
+    alert("Please select a turban size.");
+    return;
+  }
+
+  if (isMojriChecked && !mojriSize) {
+    alert("Please select a mojri size.");
+    return;
+  }
+
+  // ✅ 3. Determine correct price logic
+  const baseSellingPrice = parseFloat(productDetails?.data?.selling_price || 0);
+  const priceToUse = selectedPrice > 0 ? selectedPrice : baseSellingPrice;
+
+  // ✅ 4. Calculate total based on selection
+  const stitchingCharge =
+    selectedStitchOption === "stitch"
+      ? parseFloat(productDetails?.data?.stiching_charges?.price || 0)
+      : 0;
+
+  const customFitCharge =
+    selectedStitchOption === "customFit"
+      ? parseFloat(productDetails?.data?.extra_charges?.price || 0)
+      : 0;
+
+  const turbanCharge = isTurbanChecked
+    ? parseFloat(productDetails?.data?.turban_charges?.price || 0)
+    : 0;
+
+  const mojriCharge = isMojriChecked
+    ? parseFloat(productDetails?.data?.mojri_charges?.price || 0)
+    : 0;
+
+  const stoleCharge = isStoleChecked
+    ? parseFloat(productDetails?.data?.stole_charges?.price || 0)
+    : 0;
+
+  const totalPrice =
+    (priceToUse +
+      stitchingCharge +
+      customFitCharge +
+      turbanCharge +
+      mojriCharge +
+      stoleCharge) *
+    selectedQuantity;
+
+  // ✅ 5. Prepare cart data
+  const cartItem = {
+    product_id: productDetails?.data?.id,
+    size: selectedSize || "Default Size",
+    quantity: selectedQuantity,
+    price_per_unit: priceToUse,
+    total_price: totalPrice.toFixed(2),
+
+    // Stitching & custom fit
+    stitch_option: selectedStitchOption,
+    stitching_charge: stitchingCharge,
+    custom_fit_charge: customFitCharge,
+
+    // Accessories
+    turban_selected: isTurbanChecked,
+    turban_charge: turbanCharge,
+    turban_size: isTurbanChecked ? turbanSize : "",
+
+    mojri_selected: isMojriChecked,
+    mojri_charge: mojriCharge,
+    mojri_size: isMojriChecked ? mojriSize : "",
+
+    stole_selected: isStoleChecked,
+    stole_charge: stoleCharge,
+  };
+
+  console.log("🛒 Adding to Cart:", cartItem);
+
+  // try {
+  //   // Store in local storage (frontend cart)
+  //   const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+  //   existingCart.push(cartItem);
+  //   localStorage.setItem("cart", JSON.stringify(existingCart));
+  //   alert("Product added to cart successfully!");
+  // } catch (error) {
+  //   console.error("Error adding to cart:", error);
+  //   alert("Something went wrong while adding to cart!");
+  // }
+};
 
   return (
     <>
@@ -585,7 +721,7 @@ export const ProductDetail = () => {
                                 ))}
                               </select>
                             <p className="mt-2">
-                              {productDetails?.data?.rts_quantity <= 5 && (
+                              {productDetails?.data?.mto_quantity <= 5 && (
                                 <>Only few left</>
                               )}
                             </p>
@@ -608,7 +744,7 @@ export const ProductDetail = () => {
                         name="product_quantity"
                         id="product_quantity"
                         value={selectedQuantity}
-                        onChange={(e) => setSelectedQuantity(Number(e.target.value))}
+                        onChange={(e) => handleQuantitySelect(Number(e.target.value))}
                         disabled={!availableQty}
                       >
                         {availableQty > 0 ? (
@@ -657,7 +793,7 @@ export const ProductDetail = () => {
 
                             <div className="slkdnfkmslkmr row align-items-center">
                               <div className="col-lg-8 col-md-8 col-sm-8 col-8">
-                                <select name="" className="form-select" id="" disabled={!isTurbanChecked}>
+                                <select name="product_turbanSize" className="form-select" id="product_turbanSize" disabled={!isTurbanChecked}>
                                   <option selected value="">Select size</option>
                                   <option value="1">1</option>
                                 </select>
@@ -741,7 +877,7 @@ export const ProductDetail = () => {
 
                             <div className="slkdnfkmslkmr row align-items-center">
                               <div className="col-lg-8 col-md-8 col-sm-8 col-8">
-                                <select name="" className="form-select" id="" disabled={!isMojriChecked}>
+                                <select name="product_mojriSize" className="form-select" id="product_mojriSize" disabled={!isMojriChecked}>
                                   <option value="" selected>Select Size</option>
                                     <option value="-- U.S. &amp; Canada ----" disabled="disabled" class="disableDdlItems">-- U.S. &amp; Canada ----</option>
                                     <option value="US Size 7.5">US Size 7.5</option>
@@ -811,7 +947,7 @@ export const ProductDetail = () => {
                       </div>
 
                       <div className="dfgndfjhgdf">
-                        <button className="btn btn-main px-4 me-3">
+                        <button className="btn btn-main px-4 me-3" onClick={handleAddToCart}>
                           <i class="bi bi-bag me-1"></i> Add To Cart
                         </button>
 
