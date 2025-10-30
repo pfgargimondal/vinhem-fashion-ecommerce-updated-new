@@ -248,6 +248,7 @@ export const ProductDetail = () => {
     setSelectedPrice(finalPrice);
   };
 
+
   // ------------------------------
   // Calculate total price dynamically
   // ------------------------------
@@ -577,9 +578,7 @@ export const ProductDetail = () => {
                                     {item.plus_sizes && item.plus_sizes !== "0" && (
                                       <option value={item.plus_sizes}>
                                         {item.plus_sizes} 
-                                        {item.plus_sizes_charges > 0
-                                          ? ` (₹${item.plus_sizes_charges})`
-                                          : ""}
+                                
                                       </option>
                                     )}
                                   </React.Fragment>
@@ -1203,10 +1202,9 @@ export const ProductDetail = () => {
                       </p>
                     </div>
 
-                    <h6>
-                      Manufactured/Packed & Marketed By- <br/>
-                      VinHem Fashion Pvt Ltd, Assembled in india
-                    </h6>
+                    <p className="mb-1">Manufactured/Packed & Marketed By-</p>
+
+                    <p className="mb-0"><b>VinHem Fashion Pvt Ltd, Assembled in india</b></p>
 
                   </div>
                 </div>

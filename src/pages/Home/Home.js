@@ -122,7 +122,7 @@ export const Home = () => {
         </div>
       </div>
 
-      <div className="fbgvdsdfd6568 pt-3 pb-5 mb-4">
+      {/* <div className="fbgvdsdfd6568 pt-3 pb-5 mb-4">
         <div className="container-fluid">
           <div className="ghbgfgdf">
             <Link to={homepage?.data?.url3}>
@@ -130,80 +130,88 @@ export const Home = () => {
             </Link>
           </div>
         </div>
-      </div>
+      </div> */}
 
-      {/* <div className="fbgvdsdfd6568 pt-3 pb-5 mb-4">
+      <div className="fbgvdsdfd6568 pt-3 pb-5 mb-4">
         <div className="container-fluid">
           <div className="ghbgfgdf">
             <div className="row align-items-center">
               <div className="col-3">
                 <div className="dfnghfd">
-                  <div className="row align-items-center">
-                    <div className="col-2">
-                      <div className="sdhgdfg">
-                        <img src={`${homepage?.image_url}/${homepage?.data?.last_image1}`} alt="" />
-                      </div>
+                  <Link to={homepage?.data?.h3_url1}>
+                    <div className="row align-items-center">
+                        <div className="col-2">
+                          <div className="sdhgdfg">
+                            <img src={`${homepage?.image_url}/${homepage?.data?.h3_image1}`} alt="" />
+                          </div>
+                        </div>
+                        <div className="col-10">
+                          <div className="cfgncfgb">
+                            <h4>{homepage?.data?.h3_text1}</h4>
+                          </div>
+                        </div>
                     </div>
-                    <div className="col-10">
-                      <div className="cfgncfgb">
-                        <h4>{homepage?.data?.last_title1}</h4>
-                      </div>
-                    </div>
-                  </div>
+                  </Link>
                 </div>
               </div>
               <div className="col-3">
                 <div className="dfnghfd">
-                  <div className="row align-items-center">
-                    <div className="col-2">
-                      <div className="sdhgdfg">
-                        <img src={`${homepage?.image_url}/${homepage?.data?.last_image2}`} alt="" />
+                  <Link to={homepage?.data?.h3_url2}>
+                    <div className="row align-items-center">
+                      <div className="col-2">
+                        <div className="sdhgdfg">
+                          <img src={`${homepage?.image_url}/${homepage?.data?.h3_image2}`} alt="" />
+                        </div>
                       </div>
+                      <div className="col-10">
+                        <div className="cfgncfgb">
+                          <h4>{homepage?.data?.h3_text2}</h4>
+                        </div>
+                      </div>                    
                     </div>
-                    <div className="col-10">
-                      <div className="cfgncfgb">
-                        <h4>{homepage?.data?.last_title2}</h4>
-                      </div>
-                    </div>
-                  </div>
+                  </Link>
                 </div>
               </div>
               <div className="col-3">
                 <div className="dfnghfd">
-                  <div className="row align-items-center">
-                    <div className="col-2">
-                      <div className="sdhgdfg">
-                        <img src={`${homepage?.image_url}/${homepage?.data?.last_image3}`} alt="" />
+                  <Link to={homepage?.data?.h3_url3}>
+                    <div className="row align-items-center">
+                      <div className="col-2">
+                        <div className="sdhgdfg">
+                          <img src={`${homepage?.image_url}/${homepage?.data?.h3_image3}`} alt="" />
+                        </div>
+                      </div>
+                      <div className="col-10">
+                        <div className="cfgncfgb">
+                          <h4>{homepage?.data?.h3_text3}</h4>
+                        </div>
                       </div>
                     </div>
-                    <div className="col-10">
-                      <div className="cfgncfgb">
-                        <h4>{homepage?.data?.last_title3}</h4>
-                      </div>
-                    </div>
-                  </div>
+                  </Link>
                 </div>
               </div>
               <div className="col-3">
                 <div className="dfnghfd5">
-                  <div className="row align-items-center">
-                    <div className="col-2">
-                      <div className="sdhgdfg">
-                        <img src={`${homepage?.image_url}/${homepage?.data?.last_image3}`} alt="" />
+                  <Link to={homepage?.data?.h3_url4}>
+                    <div className="row align-items-center">
+                      <div className="col-2">
+                        <div className="sdhgdfg">
+                          <img src={`${homepage?.image_url}/${homepage?.data?.h3_image4}`} alt="" />
+                        </div>
+                      </div>
+                      <div className="col-10">
+                        <div className="cfgncfgb">
+                          <h4>{homepage?.data?.h3_text4}</h4>
+                        </div>
                       </div>
                     </div>
-                    <div className="col-10">
-                      <div className="cfgncfgb">
-                        <h4>{homepage?.data?.last_title4}</h4>
-                      </div>
-                    </div>
-                  </div>
+                  </Link>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
       
       <div className="dfndfjhdfgdf pb-5 mb-4">
         <div className="container-fluid">
