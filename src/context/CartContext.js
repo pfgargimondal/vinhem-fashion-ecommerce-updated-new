@@ -39,7 +39,7 @@ export function CartProvider({ children }) {
   }, [fetchCartCount]); // ✅ added fetchCartCount
 
 
-  const addToCart = async (productId) => {
+  const addToCart = async (productData) => {
     if (!token) {
       toast.error("Please login to add to cart");
       return;
@@ -48,7 +48,7 @@ export function CartProvider({ children }) {
     try {
       const res = await http.post(
         "/user/user-add-cart",
-        { product_id: productId },
+        productData,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

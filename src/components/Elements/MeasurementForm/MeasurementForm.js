@@ -11,6 +11,14 @@ export const MeasurementForm = ({
   const [feildNameGuide, setFeildNameGuide] = useState(null);
   const [showTabs, setShowTabs] = useState(false);
 
+
+  const [selectedSize, setSelectedSize] = useState("");
+
+  const handleSizeChange = (e) => {
+    const newSize = e.target.value;
+    setSelectedSize(newSize);
+  };
+
   const handleGuideClick = (item, feildName) => {
     if (activeGuide === item) {
       setActiveGuide(null);
@@ -556,24 +564,53 @@ export const MeasurementForm = ({
                 <p className="mb-3">Choose a size to be customized:</p>
 
                 <div className="okemlkwnjrirwer mb-3 d-flex align-items-center">
-                  {productDetails?.data?.product_inventory?.map(
-                    (productSizeVal) => (
-                      <div className="doeiwjrkweirwe">
-                        <input
-                          id="s1"
-                          name="s-optns"
-                          type="radio"
-                          className="d-none position-absolute"
-                        />
-                        <label htmlFor="s1" className="text-center p-2">
-                          <span className="mb-1">
-                            {productSizeVal.selling_price}
-                          </span>{" "}
-                          <br /> {productSizeVal.size_name}
-                        </label>
-                      </div>
-                    )
-                  )}
+                {productDetails?.data?.product_allSize?.flatMap((item, index) => {
+                  // Collect normal + plus sizes (if any)
+                  const sizes = [
+                    { 
+                      label: item.filter_size, 
+                      value: item.filter_size, 
+                      price: item.selling_price 
+                    }
+                  ];
+
+                  if (item.plus_sizes && item.plus_sizes !== "0") {
+                    sizes.push({ 
+                      label: item.plus_sizes, 
+                      value: item.plus_sizes, 
+                      price: item.plus_sizes_charges 
+                    });
+                  }
+
+                  return sizes.map((sizeObj, subIndex) => (
+                    <div className="doeiwjrkweirwe me-2 mb-2" key={`${index}-${subIndex}`}>
+                      <input
+                        id={`size-${index}-${subIndex}`}
+                        name="s-optns"
+                        type="radio"
+                        value={sizeObj.value}
+                        checked={selectedSize === sizeObj.value}
+                        onChange={handleSizeChange}
+                        className="d-none position-absolute"
+                      />
+                      <label
+                        htmlFor={`size-${index}-${subIndex}`}
+                        className={`text-center p-2 border rounded ${
+                          selectedSize === sizeObj.value ? "bg-dark text-white" : ""
+                        }`}
+                        style={{ minWidth: "70px", cursor: "pointer" }}
+                      >
+                        <span className="d-block mb-1">
+                          ₹{parseFloat(sizeObj.price || 0).toFixed(2)}
+                        </span>
+                        <small>{sizeObj.label}</small>
+                      </label>
+                    </div>
+                  ));
+                })}
+
+                  
+
                 </div>
 
                 <p>Customized orders can take minimum 7 extra working days</p>

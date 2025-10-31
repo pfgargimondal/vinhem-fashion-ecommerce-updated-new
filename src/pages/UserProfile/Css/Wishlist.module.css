@@ -243,4 +243,23 @@ form input:global(.form-control){
   font-weight: 500;
 }
 
+
+.nwArrvl {
+    /* left: 3%; */
+    position: absolute;
+    /* top: 3%; */
+    background-image: url("/public/images/ni.png");
+    background-repeat: no-repeat;
+    color: #fff;
+    background-size: 80px;
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 2.5;
+    height: 42px;
+    text-align: center;
+    width: 80px !important;
+    z-index: 999;
+}
+
 /*end  profile settings  css   */

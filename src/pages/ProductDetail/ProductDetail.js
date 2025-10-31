@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation, Mousewheel } from "swiper/modules";
+// eslint-disable-next-line
+import { toast, ToastContainer } from "react-toastify";
 
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
@@ -24,10 +26,12 @@ import http from "../../http";
 import { useAuth } from "../../context/AuthContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { DesignerSizeChart } from "../../components/Elements/DsignerSizeChart/DsignerSizeChart";
+import { useCart } from "../../context/CartContext";
 
 export const ProductDetail = () => {
 
   const { user } = useAuth();
+  const { addToCart } = useCart();
   // eslint-disable-next-line
   const [show, setShow] = useState(false);
   // eslint-disable-next-line
@@ -385,7 +389,7 @@ export const ProductDetail = () => {
     selectedQuantity;
 
   // ✅ 5. Prepare cart data
-  const cartItem = {
+  const productData = {
     product_id: productDetails?.data?.id,
     size: selectedSize || "Default Size",
     quantity: selectedQuantity,
@@ -410,18 +414,10 @@ export const ProductDetail = () => {
     stole_charge: stoleCharge,
   };
 
-  console.log("🛒 Adding to Cart:", cartItem);
+  // console.log("🛒 Adding to Cart:", productData);
 
-  // try {
-  //   // Store in local storage (frontend cart)
-  //   const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-  //   existingCart.push(cartItem);
-  //   localStorage.setItem("cart", JSON.stringify(existingCart));
-  //   alert("Product added to cart successfully!");
-  // } catch (error) {
-  //   console.error("Error adding to cart:", error);
-  //   alert("Something went wrong while adding to cart!");
-  // }
+  addToCart(productData);
+
 };
 
   return (
@@ -689,7 +685,6 @@ export const ProductDetail = () => {
                           productDetails?.data?.custom_fit?.toLowerCase() === 'yes' && (
                             <div className="ikasdnjiknswjirhwer mb-4">
                               <p className="mb-1">Submit Measurement: <span><Link to="" onClick={(e) => handleShowModal(e)}>CLICK HERE</Link></span> or <span><Link to="">Later</Link></span></p>
-
                               <p className="mb-0">+7 days, for your chosen stitching options.</p>
                             </div>
                           )
@@ -1749,6 +1744,12 @@ export const ProductDetail = () => {
           ✕
         </button>
       </Modal>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        style={{ zIndex: 9999999999 }}
+      />
     </>
   );
 };
