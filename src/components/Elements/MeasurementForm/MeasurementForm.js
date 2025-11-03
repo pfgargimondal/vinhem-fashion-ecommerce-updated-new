@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 export const MeasurementForm = ({
   productDetails,
   showSizeModal,
@@ -7,6 +6,7 @@ export const MeasurementForm = ({
   mssrmntSbmtConfrm,
   setMssrmntSbmtConfrm,
 }) => {
+
   const [activeGuide, setActiveGuide] = useState(null);
   const [feildNameGuide, setFeildNameGuide] = useState(null);
   const [showTabs, setShowTabs] = useState(false);
@@ -14,10 +14,10 @@ export const MeasurementForm = ({
 
   const [selectedSize, setSelectedSize] = useState("");
 
-  const handleSizeChange = (e) => {
-    const newSize = e.target.value;
-    setSelectedSize(newSize);
-  };
+  // const handleSizeChange = (e) => {
+  //   const newSize = e.target.value;
+  //   setSelectedSize(newSize);
+  // };
 
   const handleGuideClick = (item, feildName) => {
     if (activeGuide === item) {
@@ -398,6 +398,22 @@ export const MeasurementForm = ({
     }
   };
 
+  const [formData, setFormData] = useState({
+    measurment_name: "",
+    measurement_fit: "",
+    unit: "inch",
+    with_petticoat_lahenga: "",
+    fall_edging_work_lahenga: false,
+    matching_tassles_lahenga: false,
+    additional_customization_lahenga: "",
+    include_petticoat_saree: "",
+    saree_fall_edging: false,
+    saree_matching_tassles: false,
+    additional_customize_saree: "",
+    additional_customize_dress: "",
+    additional_customization: "",
+  });
+
   // Helper: get options based on unit
   const getOptions = (key) => {
     const keyWithUnit = key.endsWith("_options") ? key : `${key}_${unit}`;
@@ -407,6 +423,27 @@ export const MeasurementForm = ({
 
     return dataKey ? dataKey.split(",").map((v) => v.trim()) : [];
   };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+  const handleSizeChange = (e) => {
+    setSelectedSize(e.target.value);
+    setFormData((prev) => ({
+      ...prev,
+      selected_size: e.target.value,
+    }));
+  };
+  const handleSave = () => {
+    localStorage.setItem("measurementFormData", JSON.stringify(formData));
+    // alert("Measurement data saved. Please confirm on product page.");
+  };
+
+
 
   return (
     <div>
@@ -433,10 +470,11 @@ export const MeasurementForm = ({
           </div>
 
           <div className="row gx-0">
+            
             <div className={activeGuide ? "col-lg-6" : "col-lg-12"}>
               <div className="dhwekrwerwer px-4 py-4">
                 {/* <p className="mb-3">For further assistance, Chat with us <button className="btn btn-main"><i className="bi me-1 bi-whatsapp"></i> Chat With Us</button></p> */}
-
+                {/* <form  onSubmit={handleSave}> */}
                 <div className="idnjuigkjiwerwer">
                   <div className="ojaskmduihiwerwer mb-4 pb-2">
                     <div className="ihjnugherewr">
@@ -447,7 +485,7 @@ export const MeasurementForm = ({
                         }
                         alt=""
                       />
-                    </div>
+                    </div> 
 
                     <p>
                       {productDetails?.data?.product_name} -{" "}
@@ -462,7 +500,9 @@ export const MeasurementForm = ({
                       </div>
 
                       <div className="qwererwerrr flex-grow-1">
-                        <input type="text" className="form-control" />
+                        <input type="text" className="form-control" name="measurment_name" 
+                          value={formData.measurment_name}
+                          onChange={handleChange} />
                       </div>
                     </div>
                   </div>
@@ -478,7 +518,10 @@ export const MeasurementForm = ({
                               <input
                                 id="example-5"
                                 type="radio"
-                                name="radio-examples"
+                                name="measurement_fit"
+                                value="Body Fit"
+                                checked={formData.measurement_fit === "Body Fit"}
+                                onChange={handleChange}
                               />
 
                               <span>
@@ -523,7 +566,10 @@ export const MeasurementForm = ({
                               <input
                                 id="example-234"
                                 type="radio"
-                                name="radio-examples"
+                                name="measurement_fit"
+                                value="Garment Fit"
+                                checked={formData.measurement_fit === "Garment Fit"}
+                                onChange={handleChange}
                               />
 
                               <span>
@@ -560,7 +606,7 @@ export const MeasurementForm = ({
                     </div>
                   </div>
                 </div>
-
+                
                 <p className="mb-3">Choose a size to be customized:</p>
 
                 <div className="okemlkwnjrirwer mb-3 d-flex align-items-center">
@@ -586,7 +632,7 @@ export const MeasurementForm = ({
                     <div className="doeiwjrkweirwe me-2 mb-2" key={`${index}-${subIndex}`}>
                       <input
                         id={`size-${index}-${subIndex}`}
-                        name="s-optns"
+                        name="selected_size"
                         type="radio"
                         value={sizeObj.value}
                         checked={selectedSize === sizeObj.value}
@@ -608,9 +654,6 @@ export const MeasurementForm = ({
                     </div>
                   ));
                 })}
-
-                  
-
                 </div>
 
                 <p>Customized orders can take minimum 7 extra working days</p>
@@ -639,6 +682,7 @@ export const MeasurementForm = ({
 
                   {showTabs && (
                     <div className="doiewnjkrhwerwerwer mt-3">
+                      
                       <div className="dkewnjkhriwer">
                         <div className="d-flex align-items-center justify-content-between">
                           <h5 className="mb-0 px-3 py-2">Measurement Form</h5>
@@ -655,7 +699,13 @@ export const MeasurementForm = ({
                                   defaultChecked
                                   name="unit"
                                   checked={unit === "inch"}
-                                  onChange={() => setUnit("inch")}
+                                  onChange={(e) => {
+                                    setUnit(e.target.value);
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      unit: e.target.value,
+                                    }));
+                                  }}
                                 />
                                 <span>Inches</span>
                               </label>
@@ -669,7 +719,13 @@ export const MeasurementForm = ({
                                   type="radio"
                                   name="unit"
                                   checked={unit === "cm"}
-                                  onChange={() => setUnit("cm")}
+                                  onChange={(e) => {
+                                    setUnit(e.target.value);
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      unit: e.target.value,
+                                    }));
+                                  }}
                                 />
                                 <span>Cm</span>
                               </label>
@@ -678,25 +734,21 @@ export const MeasurementForm = ({
                         </div>
                       </div>
 
-                      {productDetails?.data?.custom_feild_selectOption ===
-                        "lehenga" && (
+                      {productDetails?.data?.custom_feild_selectOption === "lehenga" && (
                         <>
-                          {/* Choli Measurement */}
+                          {/* ------------------ Choli Measurement ------------------ */}
                           <div className="asdasdaswwee mt-2">
                             <h5 className="text-center text-white py-2 mb-3">
                               Choli Measurement
                             </h5>
                             <div className="ihkjnjdewrwer">
-                              <form className="row">
+                              <div className="row">
                                 {fields.map((field, index) => {
-                                  // Use unit-based key if available, otherwise fallback to field key
                                   const keyWithUnit =
-                                    productDetails?.data
-                                      ?.mesurament_form_data?.[
+                                    productDetails?.data?.mesurament_form_data?.[
                                       `${field.key}_inch`
                                     ] ||
-                                    productDetails?.data
-                                      ?.mesurament_form_data?.[
+                                    productDetails?.data?.mesurament_form_data?.[
                                       `${field.key}_cm`
                                     ]
                                       ? unit === "inch"
@@ -705,9 +757,9 @@ export const MeasurementForm = ({
                                       : field.key;
 
                                   const options =
-                                    productDetails?.data?.mesurament_form_data?.[
-                                      keyWithUnit
-                                    ]?.split(",") || [];
+                                    productDetails?.data?.mesurament_form_data?.[keyWithUnit]?.split(
+                                      ","
+                                    ) || [];
 
                                   return (
                                     <div className="col-lg-6 mb-3" key={index}>
@@ -716,17 +768,15 @@ export const MeasurementForm = ({
                                         <span
                                           className="enqury-guide"
                                           onClick={() =>
-                                            handleGuideClick(
-                                              field.guide,
-                                              field.image
-                                            )
+                                            handleGuideClick(field.guide, field.image)
                                           }
                                         >
                                           <i className="fa-solid fa-info"></i>
                                         </span>
                                       </label>
 
-                                      <select className="form-select">
+                                      {/* ✅ Added name attribute */}
+                                      <select className="form-select" name={keyWithUnit}>
                                         <option disabled selected>
                                           --Select Here--
                                         </option>
@@ -739,40 +789,37 @@ export const MeasurementForm = ({
                                     </div>
                                   );
                                 })}
-                              </form>
+                              </div>
                             </div>
                           </div>
 
-                          {/* Lehenga Measurement */}
+                          {/* ------------------ Lehenga Measurement ------------------ */}
                           <div className="asdasdaswwee mt-2">
                             <h5 className="text-center text-white py-2 mb-3">
                               Lehenga Measurement
                             </h5>
 
-                            <form className="row" key={`lehenga-${unit}`}>
+                            <div className="row" key={`lehenga-${unit}`}>
                               {lehengaFields.map((field, index) => {
-                                // Show checkbox before Petticoat Waist field
-                                if (
-                                  field.key === "lehenga_petticoat_waist_option"
-                                ) {
+                                // Petticoat Waist toggle
+                                if (field.key === "lehenga_petticoat_waist_option") {
                                   return (
                                     <React.Fragment key={index}>
-                                      {/* Checkbox */}
+                                      {/* ✅ Checkbox with name */}
                                       <div className="col-12 mb-3">
                                         <label className="form-label d-flex align-items-center justify-content-center">
                                           <input
                                             type="checkbox"
                                             className="me-2"
+                                            name="with_petticoat_lahenga"
                                             checked={showPetticoat}
-                                            onChange={() =>
-                                              setShowPetticoat(!showPetticoat)
-                                            }
+                                            onChange={() => setShowPetticoat(!showPetticoat)}
                                           />
                                           With Petticoat (Inskirt)
                                         </label>
                                       </div>
 
-                                      {/* Waist field (only shown if checkbox is checked) */}
+                                      {/* ✅ Petticoat Waist (only visible if checked) */}
                                       {showPetticoat && (
                                         <div className="col-lg-6 mb-3">
                                           <label className="form-label d-flex align-items-center justify-content-between">
@@ -780,26 +827,21 @@ export const MeasurementForm = ({
                                             <span
                                               className="enqury-guide"
                                               onClick={() =>
-                                                handleGuideClick(
-                                                  field.guide,
-                                                  field.image
-                                                )
+                                                handleGuideClick(field.guide, field.image)
                                               }
                                             >
                                               <i className="fa-solid fa-info"></i>
                                             </span>
                                           </label>
-                                          <select className="form-select">
+                                          <select className="form-select" name={field.key}>
                                             <option disabled selected>
                                               --Select Here--
                                             </option>
-                                            {getOptions(field.key).map(
-                                              (val, i) => (
-                                                <option key={i} value={val}>
-                                                  {val}
-                                                </option>
-                                              )
-                                            )}
+                                            {getOptions(field.key).map((val, i) => (
+                                              <option key={i} value={val}>
+                                                {val}
+                                              </option>
+                                            ))}
                                           </select>
                                         </div>
                                       )}
@@ -807,33 +849,27 @@ export const MeasurementForm = ({
                                   );
                                 }
 
-                                // Petticoat Length field (only show if checkbox is checked)
+                                // Hide Petticoat Length if unchecked
                                 if (
-                                  field.key ===
-                                    "lehenga_petticoat_length_option" &&
+                                  field.key === "lehenga_petticoat_length_option" &&
                                   !showPetticoat
                                 ) {
                                   return null;
                                 }
 
-                                // Render all other fields normally
+                                // ✅ Render all other fields with name
                                 return (
                                   <div className="col-lg-6 mb-3" key={index}>
                                     <label className="form-label d-flex align-items-center justify-content-between">
                                       {field.label}
                                       <span
                                         className="enqury-guide"
-                                        onClick={() =>
-                                          handleGuideClick(
-                                            field.guide,
-                                            field.image
-                                          )
-                                        }
+                                        onClick={() => handleGuideClick(field.guide, field.image)}
                                       >
                                         <i className="fa-solid fa-info"></i>
                                       </span>
                                     </label>
-                                    <select className="form-select">
+                                    <select className="form-select" name={field.key}>
                                       <option disabled selected>
                                         --Select Here--
                                       </option>
@@ -847,28 +883,38 @@ export const MeasurementForm = ({
                                 );
                               })}
 
+                              {/* ✅ Extra options with names */}
                               <div className="col-6 mb-3">
                                 <label className="form-label d-flex align-items-center">
-                                  <input type="checkbox" className="me-2" />
+                                  <input
+                                    type="checkbox"
+                                    className="me-2"
+                                    name="fall_edging_work_lahenga"
+                                  />
                                   Fall & Edging Work
                                 </label>
                               </div>
+
                               <div className="col-6 mb-3">
                                 <label className="form-label d-flex align-items-center">
-                                  <input type="checkbox" className="me-2" />
+                                  <input
+                                    type="checkbox"
+                                    className="me-2"
+                                    name="matching_tassles_lahenga"
+                                  />
                                   Matching Tassles
                                 </label>
                               </div>
-                            </form>
+                            </div>
                           </div>
 
-                          {/* Additional Customization */}
+                          {/* ------------------ Additional Customization ------------------ */}
                           <div className="col-lg-12 mb-3">
                             <label className="form-label">
                               Additional customization requests here.
                             </label>
                             <textarea
-                              name=""
+                              name="additional_customization_lahenga"
                               className="form-control"
                               placeholder="Please specify any additional customization requests here."
                               style={{ height: "150px" }}
@@ -876,18 +922,17 @@ export const MeasurementForm = ({
                           </div>
                         </>
                       )}
+
 
                       {productDetails?.data?.custom_feild_selectOption ===
                         "saree" && (
                         <>
                           {/* Lehenga Measurement */}
                           <div className="asdasdaswwee mt-2">
-                            <form className="row" key={`saree-${unit}`}>
+                            <div className="row" key={`saree-${unit}`}>
                               {sareeFields.map((field, index) => {
-                                // Show checkbox before Petticoat Waist field
-                                if (
-                                  field.key === "saree_petticoat_waist_option"
-                                ) {
+                                // Petticoat Waist Option (with checkbox)
+                                if (field.key === "saree_petticoat_waist_option") {
                                   return (
                                     <React.Fragment key={index}>
                                       {/* Checkbox */}
@@ -896,16 +941,21 @@ export const MeasurementForm = ({
                                           <input
                                             type="checkbox"
                                             className="me-2"
+                                            name="include_petticoat_saree"
                                             checked={showPetticoat}
-                                            onChange={() =>
-                                              setShowPetticoat(!showPetticoat)
-                                            }
+                                            onChange={() => {
+                                              setShowPetticoat(!showPetticoat);
+                                              setFormData((prev) => ({
+                                                ...prev,
+                                                include_petticoat: !showPetticoat,
+                                              }));
+                                            }}
                                           />
                                           With Petticoat (Inskirt)
                                         </label>
                                       </div>
 
-                                      {/* Waist field (only shown if checkbox is checked) */}
+                                      {/* Petticoat Waist field (only if checked) */}
                                       {showPetticoat && (
                                         <div className="col-lg-6 mb-3">
                                           <label className="form-label d-flex align-items-center justify-content-between">
@@ -913,26 +963,26 @@ export const MeasurementForm = ({
                                             <span
                                               className="enqury-guide"
                                               onClick={() =>
-                                                handleGuideClick(
-                                                  field.guide,
-                                                  field.image
-                                                )
+                                                handleGuideClick(field.guide, field.image)
                                               }
                                             >
                                               <i className="fa-solid fa-info"></i>
                                             </span>
                                           </label>
-                                          <select className="form-select">
-                                            <option disabled selected>
+                                          <select
+                                            className="form-select"
+                                            name={field.key}
+                                            onChange={handleChange}
+                                            value={formData[field.key] || ""}
+                                          >
+                                            <option disabled value="">
                                               --Select Here--
                                             </option>
-                                            {getOptions(field.key).map(
-                                              (val, i) => (
-                                                <option key={i} value={val}>
-                                                  {val}
-                                                </option>
-                                              )
-                                            )}
+                                            {getOptions(field.key).map((val, i) => (
+                                              <option key={i} value={val}>
+                                                {val}
+                                              </option>
+                                            ))}
                                           </select>
                                         </div>
                                       )}
@@ -940,34 +990,30 @@ export const MeasurementForm = ({
                                   );
                                 }
 
-                                // Petticoat Length field (only show if checkbox is checked)
-                                if (
-                                  field.key ===
-                                    "saree_petticoat_length_option" &&
-                                  !showPetticoat
-                                ) {
+                                // Petticoat Length — hide if Petticoat is not selected
+                                if (field.key === "saree_petticoat_length_option" && !showPetticoat) {
                                   return null;
                                 }
 
-                                // Render all other fields normally
+                                // Render all other Saree fields
                                 return (
                                   <div className="col-lg-6 mb-3" key={index}>
                                     <label className="form-label d-flex align-items-center justify-content-between">
                                       {field.label}
                                       <span
                                         className="enqury-guide"
-                                        onClick={() =>
-                                          handleGuideClick(
-                                            field.guide,
-                                            field.image
-                                          )
-                                        }
+                                        onClick={() => handleGuideClick(field.guide, field.image)}
                                       >
                                         <i className="fa-solid fa-info"></i>
                                       </span>
                                     </label>
-                                    <select className="form-select">
-                                      <option disabled selected>
+                                    <select
+                                      className="form-select"
+                                      name={field.key}
+                                      onChange={handleChange}
+                                      value={formData[field.key] || ""}
+                                    >
+                                      <option disabled value="">
                                         --Select Here--
                                       </option>
                                       {getOptions(field.key).map((val, i) => (
@@ -980,54 +1026,69 @@ export const MeasurementForm = ({
                                 );
                               })}
 
+                              {/* Saree Custom Options */}
                               <div className="col-6 mb-3">
                                 <label className="form-label d-flex align-items-center">
-                                  <input type="checkbox" className="me-2" />
+                                  <input
+                                    type="checkbox"
+                                    className="me-2"
+                                    name="saree_fall_edging"
+                                    checked={formData.saree_fall_edging || false}
+                                    onChange={handleChange}
+                                  />
                                   Fall & Edging Work
                                 </label>
                               </div>
+
                               <div className="col-6 mb-3">
                                 <label className="form-label d-flex align-items-center">
-                                  <input type="checkbox" className="me-2" />
+                                  <input
+                                    type="checkbox"
+                                    className="me-2"
+                                    name="saree_matching_tassles"
+                                    checked={formData.saree_matching_tassles || false}
+                                    onChange={handleChange}
+                                  />
                                   Matching Tassles
                                 </label>
                               </div>
-                            </form>
+                            </div>
+
+                            {/* Additional Customization */}
+                            <div className="col-lg-12 mb-3">
+                              <label className="form-label">
+                                Additional customization requests here.
+                              </label>
+                              <textarea
+                                name="additional_customize_saree"
+                                className="form-control"
+                                placeholder="Please specify any additional customization requests here."
+                                style={{ height: "150px" }}
+                                value={formData.additional_customize_saree || ""}
+                                onChange={handleChange}
+                              ></textarea>
+                            </div>
                           </div>
 
-                          {/* Additional Customization */}
-                          <div className="col-lg-12 mb-3">
-                            <label className="form-label">
-                              Additional customization requests here.
-                            </label>
-                            <textarea
-                              name=""
-                              className="form-control"
-                              placeholder="Please specify any additional customization requests here."
-                              style={{ height: "150px" }}
-                            ></textarea>
-                          </div>
                         </>
                       )}
 
-                      {productDetails?.data?.custom_feild_selectOption ===
-                        "dress" && (
+                      {productDetails?.data?.custom_feild_selectOption === "dress" && (
                         <>
+                          {/* Kurta Measurement */}
                           <div className="asdasdaswwee mt-2">
                             <h5 className="text-center text-white py-2 mb-3">
                               Kurta Measurement
                             </h5>
                             <div className="ihkjnjdewrwer">
-                              <form className="row">
+                              <div className="row">
                                 {dressFields.map((field, index) => {
-                                  // Use unit-based key if available, otherwise fallback to field key
+                                  // Detect inch/cm-based key
                                   const keyWithUnit =
-                                    productDetails?.data
-                                      ?.mesurament_form_data?.[
+                                    productDetails?.data?.mesurament_form_data?.[
                                       `${field.key}_inch`
                                     ] ||
-                                    productDetails?.data
-                                      ?.mesurament_form_data?.[
+                                    productDetails?.data?.mesurament_form_data?.[
                                       `${field.key}_cm`
                                     ]
                                       ? unit === "inch"
@@ -1042,23 +1103,25 @@ export const MeasurementForm = ({
 
                                   return (
                                     <div className="col-lg-6 mb-3" key={index}>
-                                      <label className="form-label">
+                                      <label className="form-label d-flex align-items-center justify-content-between">
                                         {field.label}
                                         <span
                                           className="enqury-guide"
                                           onClick={() =>
-                                            handleGuideClick(
-                                              field.guide,
-                                              field.image
-                                            )
+                                            handleGuideClick(field.guide, field.image)
                                           }
                                         >
                                           <i className="fa-solid fa-info"></i>
                                         </span>
                                       </label>
 
-                                      <select className="form-select">
-                                        <option disabled selected>
+                                      <select
+                                        className="form-select"
+                                        name={field.key}
+                                        onChange={handleChange}
+                                        value={formData[field.key] || ""}
+                                      >
+                                        <option disabled value="">
                                           --Select Here--
                                         </option>
                                         {options.map((val, i) => (
@@ -1070,24 +1133,23 @@ export const MeasurementForm = ({
                                     </div>
                                   );
                                 })}
-                              </form>
+                              </div>
                             </div>
                           </div>
+
+                          {/* Bottom Measurement */}
                           <div className="asdasdaswwee mt-2">
                             <h5 className="text-center text-white py-2 mb-3">
                               Bottom Measurement
                             </h5>
                             <div className="ihkjnjdewrwer">
-                              <form className="row">
+                              <div className="row">
                                 {bottomDressFields.map((field, index) => {
-                                  // Use unit-based key if available, otherwise fallback to field key
                                   const keyWithUnit =
-                                    productDetails?.data
-                                      ?.mesurament_form_data?.[
+                                    productDetails?.data?.mesurament_form_data?.[
                                       `${field.key}_inch`
                                     ] ||
-                                    productDetails?.data
-                                      ?.mesurament_form_data?.[
+                                    productDetails?.data?.mesurament_form_data?.[
                                       `${field.key}_cm`
                                     ]
                                       ? unit === "inch"
@@ -1102,23 +1164,25 @@ export const MeasurementForm = ({
 
                                   return (
                                     <div className="col-lg-6 mb-3" key={index}>
-                                      <label className="form-label">
+                                      <label className="form-label d-flex align-items-center justify-content-between">
                                         {field.label}
                                         <span
                                           className="enqury-guide"
                                           onClick={() =>
-                                            handleGuideClick(
-                                              field.guide,
-                                              field.image
-                                            )
+                                            handleGuideClick(field.guide, field.image)
                                           }
                                         >
                                           <i className="fa-solid fa-info"></i>
                                         </span>
                                       </label>
 
-                                      <select className="form-select">
-                                        <option disabled selected>
+                                      <select
+                                        className="form-select"
+                                        name={field.key}
+                                        onChange={handleChange}
+                                        value={formData[field.key] || ""}
+                                      >
+                                        <option disabled value="">
                                           --Select Here--
                                         </option>
                                         {options.map((val, i) => (
@@ -1130,7 +1194,7 @@ export const MeasurementForm = ({
                                     </div>
                                   );
                                 })}
-                              </form>
+                              </div>
                             </div>
                           </div>
 
@@ -1140,32 +1204,30 @@ export const MeasurementForm = ({
                               Additional customization requests here.
                             </label>
                             <textarea
-                              name=""
+                              name="additional_customize_dress"
                               className="form-control"
                               placeholder="Please specify any additional customization requests here."
                               style={{ height: "150px" }}
+                              onChange={handleChange}
+                              value={formData.additional_customize_dress || ""}
                             ></textarea>
                           </div>
                         </>
                       )}
 
-                      {productDetails?.data?.custom_feild_selectOption ===
-                        "generic" && (
+
+                      {productDetails?.data?.custom_feild_selectOption === "generic" && (
                         <>
                           <div className="asdasdaswwee mt-2">
                             <div className="ihkjnjdewrwer">
-                              <form className="row">
+                              <div className="row">
                                 {measurementFields.map((field) => {
                                   // Only show if required flag = "1"
-                                  const requiredFlag =
-                                    data?.[`${field.key}_required`];
+                                  const requiredFlag = data?.[`${field.key}_required`];
                                   if (requiredFlag !== "1") return null;
 
                                   return (
-                                    <div
-                                      className="col-lg-6 mb-3"
-                                      key={field.key}
-                                    >
+                                    <div className="col-lg-6 mb-3" key={field.key}>
                                       <label className="form-label d-flex align-items-center justify-content-between">
                                         <span>{field.label}</span>
 
@@ -1173,9 +1235,7 @@ export const MeasurementForm = ({
                                           className="enqury-guide ms-2"
                                           onClick={() =>
                                             handleGuideClick(
-                                              data?.[
-                                                `${field.key}_description`
-                                              ],
+                                              data?.[`${field.key}_description`],
                                               data?.[`${field.key}_photo`]
                                             )
                                           }
@@ -1187,23 +1247,21 @@ export const MeasurementForm = ({
 
                                       <select
                                         className="form-select"
-                                        name={`${field.key}_option`}
+                                        name={field.key} // ✅ Added dynamic name
                                       >
                                         <option disabled selected>
                                           --Select Here--
                                         </option>
-                                        {getOptionsGeneric(field.key).map(
-                                          (val, i) => (
-                                            <option key={i} value={val.trim()}>
-                                              {val.trim()}
-                                            </option>
-                                          )
-                                        )}
+                                        {getOptionsGeneric(field.key).map((val, i) => (
+                                          <option key={i} value={val.trim()}>
+                                            {val.trim()}
+                                          </option>
+                                        ))}
                                       </select>
                                     </div>
                                   );
                                 })}
-                              </form>
+                              </div>
                             </div>
                           </div>
 
@@ -1213,7 +1271,7 @@ export const MeasurementForm = ({
                               Additional customization requests here.
                             </label>
                             <textarea
-                              name=""
+                              name="additional_customization" // ✅ Added name
                               className="form-control"
                               placeholder="Please specify any additional customization requests here."
                               style={{ height: "150px" }}
@@ -1224,9 +1282,10 @@ export const MeasurementForm = ({
                     </div>
                   )}
                 </div>
+                {/* </form> */}
               </div>
             </div>
-
+            
             {activeGuide && (
               <div className="col-lg-6">
                 <div className="doienkwjrewewr p-5 pt-2">
@@ -1263,7 +1322,10 @@ export const MeasurementForm = ({
 
           <div className="doiewnjkrhwerwerwer d-flex align-items-center justify-content-end px-4 pt-2 pb-3">
             <button
-              onClick={() => setMssrmntSbmtConfrm(!mssrmntSbmtConfrm)}
+              onClick={() => {
+                handleSave(); // Save or prepare form data
+                setMssrmntSbmtConfrm(true); // Open confirmation modal
+              }}
               className="btn btn-main w-100"
             >
               Review & Submit

@@ -19,7 +19,7 @@ root.render(
           <FilterProvider>
             <CartProvider>
               <WishlistProvider>
-                <App />
+                  <App />
               </WishlistProvider>
             </CartProvider>
           </FilterProvider>

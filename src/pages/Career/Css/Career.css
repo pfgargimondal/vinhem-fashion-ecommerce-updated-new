@@ -1,123 +1,154 @@
-/*start  career  css   */
-/*start  career  css   */
-/*start  career  css   */
+/* start  career2  page css */
+/* start  career2  page css */
+/* start  career2  page css */
 
-.aboutusbannr {
-  width: 100%;
-  height: 500px;
-}
 
-.dfhfjhdfdf {
-  margin-top: 850px !important;
-}
 
-.dfbhdf h2 {
-  padding-top: 160px;
-  font-size: 60px;
-  font-weight: 700;
-}
-.dfbhdf p {
-  color: #000;
+
+
+
+.fbhjjdfjk554 .question {
+  font-size: 15px;
   font-weight: 600;
-  font-size: 18px;
+  padding: 10px 80px 10px 20px;
+  /* border: 1px solid gray; */
+  /* box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset; */
+  /* box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px; */
+  margin-bottom: 5px;
+  position: relative;
+  display: flex;
+  border: 1px solid black;
+  /* border-radius: 6px; */
+  align-items: center;
+  cursor: pointer;
 }
 
-.xfnhvjhdfbvgdfg {
-  width: 100%;
+
+.fbhjjdfjk554 .question i {
+  font-size: 1.5rem;
+  position: absolute;
+  right: 20px;
+  transition: 0.2s;
+}
+
+.answercont {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.answercont.open {
+  max-height: initial;
+}
+
+.fbhjjdfjk554 .question.active::after {
+  transform: rotate(45deg);
+}
+
+.fbhjjdfjk554 .answer {
+  padding: 0 20px 20px;
+  line-height: 1.5rem;
+}
+
+
+
+
+
+
+@media screen and (max-width: 790px){
+  html {
+    font-size: 14px;
+  }
+  .fjgnfg55d .wrapper {
+  width: 80%;
+}
+}
+
+
+
+
+.fbhjjdfjk554
+{
   padding: 40px 0;
 }
 
-.fghdfgdf {
-  padding: 20px;
-  margin: 10px;
+
+.bgdf55ff
+{
+  padding: 15px 0;
 }
 
-.dfgdf {
-  width: 60px;
-  height: 60px;
-  text-align: center;
-  margin: auto;
+
+.bgdf55ff ul li
+{
+  padding-bottom: 2px;
 }
-.dfgdf img {
+
+
+.sdfbjhfsdf
+{
   width: 100%;
-  height: 100%;
+  padding: 40px 0;
 }
-
-.fbgdfg {
-  text-align: center;
-}
-.dfbgghdfgdfg h2 {
-  color: black;
-  font-weight: 600;
-}
-.dfbgghdfgdfg i {
-  color: #e00000;
-}
-
-.dfhgdfbgdfbhjh65 {
-  /* width: 100%; */
-  height: 650px;
-  margin-top: 200px;
-  position: absolute;
-}
-
-
-
-
-
-.dfgndfgdfg {
-  width: 85%;
-  margin:auto;
-  background-color: #ffffff;
-  padding: 40px;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-  margin-top: -160px !important;
-  position: relative;
-}
-
-.fbfdf {
+.fnb788f
+{
+  width: 70%;
+  margin: auto;
   text-align: center;
 }
 
-.fbfdf h2 {
+
+.fnb788f h2
+{
+   font-size: 40px;
+   font-weight: 600;
+   color: #000;
+}
+
+
+.fnb788f p
+{
+  font-size: 17px;
   color: #000;
-  font-size: 40px;
-  font-weight: 600;
+  font-size: 500;
 }
 
-.fbfdf p {
-  font-size: 17px !important;
+
+.xfxf888
+{
+ margin-bottom: 10px;
 }
 
-.jhgdfg57 label {
+
+.xfxf888 label
+{
+  font-weight: 500;
   color: #000;
-  font-weight: 600;
-  padding-bottom: 10px;
+  margin-bottom: 5px;
 }
 
-.jhgdfg57 .form-control {
+
+.xfxf888 .form-control
+{
   padding: 10px;
-  background-color: #fff !important;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(96, 96, 96) 0px 0px 0px 1px inset;
 }
 
-.jhgdfg57 {
-  margin-bottom: 15px;
+
+.xfxf888 .form-select
+{
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(96, 96, 96) 0px 0px 0px 1px inset;
+
+
 }
 
-.yusdsd52521{
-    text-align-last: center;
+
+.dfbgjhdf5
+{
+  text-align: center;
 }
 
-.yusdsd52521 button {
-  padding: 14px 35px;
-  background-color: #032D60;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  font-weight: 600;
-  margin-top: 10px;
-}
-
-/*end  career  css   */
-/*end  career  css   */
-/*end  career  css   */
+/* end  career2  page css */
+/* end  career2  page css */
+/* end  career2  page css */

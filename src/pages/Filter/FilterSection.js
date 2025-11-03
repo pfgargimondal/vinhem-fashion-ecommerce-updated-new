@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useFilter } from "../../context/FilterContext";
 
 export default function FilterSection({ allFilterMappingdata, filterCategories }) {
-  const { setMainCategory, setSubCategory, setFilterCategory, setColor, setFabric, setDesigner, setSize, setOccasion } = useFilter();
+  const { setMainCategory, setSubCategory, setFilterCategory, setColor, setMaterial, setDesigner, setSize, setOccasion } = useFilter();
   const [selectedTheme, setSelectedTheme] = useState("");
   const [sbctgry, setSbctgry] = useState(null);
   const [insdSbctgry, setInsdSbctgry] = useState(null);
@@ -19,15 +19,15 @@ export default function FilterSection({ allFilterMappingdata, filterCategories }
         setColor(value);
         break;
       
-      case "fabric":
-        setFabric(value);
-        break;
+      case "material":
+        setMaterial(value);
+        break;       
 
-      case "designer":
+      case "designers":
         setDesigner(value);
         break;
 
-      case "size":
+      case "plus_sizes":
         setSize(value);
         break;
 
@@ -225,6 +225,7 @@ export default function FilterSection({ allFilterMappingdata, filterCategories }
                         </svg>
                         </span>
                     </label>
+
                     <label htmlFor={`${dvbfbxdfbg}-${indexdsvd}`}>{item.trim()}</label>
                 </div>
               ))

@@ -8,7 +8,7 @@ const filterInitialState = {
     subCategory: null,
     filterCategory: null,
     color: null,
-    fabric: null,
+    material: null,
     designer: null,    
     size: null,
     occasion: null,
@@ -16,13 +16,14 @@ const filterInitialState = {
     newIn: false,
     readyToShip: null,
     onSale: false,
-    cstmFit: false    
+    cstmFit: false
 }
+
 
 const FilterContext = createContext(filterInitialState);
 
 export const FilterProvider = ({children}) => {
-    const [state, dispatch] = useReducer(filterReducer, filterInitialState);
+    const [state, dispatch] = useReducer(filterReducer, filterInitialState);    
 
 
     //productlist
@@ -117,20 +118,21 @@ export const FilterProvider = ({children}) => {
     }    
 
 
-    //fabric
+    //material
 
-    function setFabric(fabric) {
+    function setMaterial(material) {
         dispatch({
-            type: "FABRIC",
+            type: "MATERIAL",
             payload: {
-                fabric: fabric
+                material: material
             }
         })
     }
 
-    function filterFabric(products) {
-        return state.fabric ? products.filter(product => product.fabric === state.fabric) : products;
+    function filterMaterial(products) {
+        return state.material ? products.filter(product => product.fabric?.toLowerCase().trim() === state.material?.toLowerCase().trim()) : products;
     }
+    
 
 
     //designer
@@ -235,7 +237,7 @@ export const FilterProvider = ({children}) => {
     }
 
     function filterReadyToShip(products) {
-        return state.readyToShip ? products.filter(product => product?.product_category?.toString()?.trim()?.toLowerCase() === state.readyToShip?.toString()?.trim()?.toLowerCase()) : products;
+        return state.readyToShip ? products.filter(product => (product?.rts_quantity * 1) > 0) : products;
     }
 
 
@@ -280,7 +282,7 @@ export const FilterProvider = ({children}) => {
     }
 
 
-    const filteredProducts = filterReadyToShip(filterNewArrival(filterOnSale(filterCstmFit(filterSortBy(filterOccasion(filterSize(filterDesigner(filterFabric(filterColor(filterFilterCategory(filterSubCategory(filterMainCategory(state.productList)))))))))))));
+    const filteredProducts = filterReadyToShip(filterNewArrival(filterOnSale(filterCstmFit(filterSortBy(filterOccasion(filterSize(filterDesigner(filterMaterial(filterColor(filterFilterCategory(filterSubCategory(filterMainCategory(state.productList)))))))))))));
 
 
 
@@ -288,12 +290,14 @@ export const FilterProvider = ({children}) => {
         products: filteredProducts,
         onSale: state.onSale,
         newIn: state.newIn,
+        readyToShip: state.readyToShip,
+        cstmFit: state.cstmFit,
         initialProductList,
         setMainCategory,
         setSubCategory,
         setFilterCategory,
         setColor,
-        setFabric,
+        setMaterial,
         setDesigner,
         setSize,
         setOccasion,

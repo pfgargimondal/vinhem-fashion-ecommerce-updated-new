@@ -156,9 +156,6 @@ header .header-top .doewhruiwerwer_right ul li span {
   justify-content: space-between;
   align-items: center;
 }
-.ojkmiweee_right{
-  overflow-x: auto;
-}
 header .header-main .doiewhirw_left img {
   width: auto;
 }
@@ -263,6 +260,7 @@ header .header-main .swiper-slide:hover .header-mega-menu{
 }
 
 header .header-main .swiper-slide:nth-of-type(10n - 5):hover .header-mega-menu,
+header .header-main .swiper-slide:nth-of-type(10n - 2):hover .header-mega-menu,
 header .header-main .swiper-slide:nth-of-type(10n - 1):hover .header-mega-menu{
   top: 67%;
   left: 0;
@@ -357,3 +355,44 @@ header .header-main .swiper-slide:nth-of-type(10n - 1):hover .header-mega-menu{
 .dsgdfgsdf{
   display: none;
 }
+
+
+/*currncy cnvrtr start*/
+
+.custom-currency-dropdown {
+  position: relative;
+}
+
+.currency-toggle-btn {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 6px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.currency-toggle-btn:hover {
+  background: #f8f8f8;
+}
+
+.currency-menu {
+  min-width: 230px;
+  z-index: 999;
+  list-style: none;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.currency-item {
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+
+.currency-item:hover {
+  background: #f0f0f0;
+}
+
+/*currncy cnvrtr end*/

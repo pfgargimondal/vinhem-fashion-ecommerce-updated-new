@@ -18,8 +18,8 @@ export const filterReducer = (state, action) => {
         case "COLOR":
             return {...state, color: payload.color}
 
-        case "FABRIC":
-            return {...state, fabric: payload.fabric}
+        case "MATERIAL":
+            return {...state, material: payload.material}
 
         case "DESIGNER":
             return {...state, designer: payload.designer}
@@ -52,7 +52,7 @@ export const filterReducer = (state, action) => {
                 subCategory: null,
                 filterCategory: null,
                 color: null,
-                fabric: null,
+                material: null,
                 designer: null,    
                 size: null,
                 occasion: null,

@@ -52,6 +52,7 @@ export const Header = ({ shouldHideHeader, shouldHideFullHeaderFooterRoutes }) =
 
   const [mainCategory, SetmainCategory] = useState([]);
   const [currency, Setcurrency] = useState([]);
+  const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
 
   useEffect(() => {
       const fetchMainCategory = async () => {
@@ -100,6 +101,40 @@ export const Header = ({ shouldHideHeader, shouldHideFullHeaderFooterRoutes }) =
   useEffect(() => {
     setUserDropdown(false);
   }, [pathName]);
+
+
+  const getCountryCode = (currencyCode) => {
+    if (!currencyCode) return "un"; // fallback if null/undefined
+
+    const mapping = {
+      USD: "us", // United States 🇺🇸
+      EUR: "eu", // European Union 🇪🇺
+      GBP: "gb", // United Kingdom 🇬🇧
+      CAD: "ca", // Canada 🇨🇦
+      AFN: "af", // Afghanistan 🇦🇫
+      INR: "in", // India 🇮🇳
+      AUD: "au", // Australia 🇦🇺
+      AED: "ae", // United Arab Emirates 🇦🇪
+      SGD: "sg", // Singapore 🇸🇬
+      JPY: "jp", // Japan 🇯🇵
+      CNY: "cn", // China 🇨🇳
+      NZD: "nz", // New Zealand 🇳🇿
+      CHF: "ch", // Switzerland 🇨🇭
+      ZAR: "za", // South Africa 🇿🇦
+      SEK: "se", // Sweden 🇸🇪
+      NOK: "no", // Norway 🇳🇴
+      DKK: "dk", // Denmark 🇩🇰
+      HKD: "hk", // Hong Kong 🇭🇰
+      MYR: "my", // Malaysia 🇲🇾
+      THB: "th", // Thailand 🇹🇭
+      PKR: "pk", // Pakistan 🇵🇰
+      BDT: "bd", // Bangladesh 🇧🇩
+      LKR: "lk", // Sri Lanka 🇱🇰
+    };
+
+    // Normalize input and return mapped country code, default to UN flag
+    return mapping[currencyCode.toUpperCase()] || "un";
+  };
 
 
   return (
@@ -177,7 +212,7 @@ export const Header = ({ shouldHideHeader, shouldHideFullHeaderFooterRoutes }) =
                     <div className="col-lg-6">
                       <div className="doiwehrwehirnwerwer aosndkjnjhasekwewt row align-items-center">
                         <div className="col-lg-2">
-                          <Form.Select
+                          {/* <Form.Select
                             className="me-2"
                             aria-label="Select currency"
                             value={selectedCurrency?.id || currency.find(c => c.choice === 1)?.id || ""}
@@ -195,7 +230,58 @@ export const Header = ({ shouldHideHeader, shouldHideFullHeaderFooterRoutes }) =
                                 {allCurrency.currency_type} ({allCurrency.currency_code})
                               </option>
                             ))}
-                          </Form.Select>
+                          </Form.Select> */}
+
+                          <div className="custom-currency-dropdown position-relative">
+                            <button
+                              className="currency-toggle-btn d-flex align-items-center"
+                              onClick={() => setShowCurrencyDropdown(!showCurrencyDropdown)}
+                            >
+                              <span className="me-2">
+                                <img
+                                  src={`https://flagcdn.com/24x18/${getCountryCode(selectedCurrency?.currency_code || "INR")}.png`}
+                                  alt={selectedCurrency?.currency_code || "INR"}
+                                  className="me-0"
+                                  width="24"
+                                  height="18"
+                                />
+                              </span>
+                              <span>{selectedCurrency?.currency_code || "INR"}</span>
+                              <i
+                                className={`fa-solid ms-2 ${
+                                  showCurrencyDropdown ? "fa-chevron-up" : "fa-chevron-down"
+                                }`}
+                              ></i>
+                            </button>
+
+                            {showCurrencyDropdown && (
+                              <ul className="currency-menu position-absolute bg-white shadow rounded-3 mt-2 mb-0 p-2">
+                                {currency.map((cur) => (
+                                  <li
+                                    key={cur.id}
+                                    className="currency-item d-flex align-items-center py-1 px-2"
+                                    onClick={() => {
+                                      setSelectedCurrency(cur);
+                                      setShowCurrencyDropdown(false);
+                                    }}
+                                  >
+                                    <span className="me-2">
+                                      <img
+                                        src={`https://flagcdn.com/24x18/${getCountryCode(cur.currency_code)}.png`}
+                                        alt={cur.currency_code}
+                                        className="me-2"
+                                        width="24"
+                                        height="18"
+                                      />
+                                    </span>
+                                    <span>
+                                      {cur.currency_type} ({cur.currency_code})
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+                          </div>
                         </div>
 
                         <div className="col-lg-10">
@@ -276,12 +362,12 @@ export const Header = ({ shouldHideHeader, shouldHideFullHeaderFooterRoutes }) =
                         <div className="h-m-m-inner bg-white py-2 mt-3">
                           <div className="container-fluid">
                             <div className="row">
-                              <div className="col-lg-8">
+                              <div className="col-lg-7">
                                 <div className="ojkmiweee_left py-3">
                                   <div className="row">
 
                                     {category.head_categories?.map((headCat) => (
-                                      <div className="col-lg-3" key={headCat.id}>
+                                      <div className="col-lg-4" key={headCat.id}>
                                         <div className="oieniuiewr_inner">
                                           <h5>{headCat.headCategories_name}</h5>
                                           <ul className="mb-0 ps-0">
@@ -394,16 +480,19 @@ export const Header = ({ shouldHideHeader, shouldHideFullHeaderFooterRoutes }) =
                                 </div>
                               </div>
 
-                              <div className="col-lg-4">
+                              <div className="col-lg-5">
                                 <div className="ojkmiweee_right">
                                   <div className="row flex-nowrap">
                                     {category.mainCategory_banner?.map((CategoryBanner) => (
-                                      <div className="col-6" key={CategoryBanner.id}>
+                                      <div className="col-4" key={CategoryBanner.id}>
                                         <div className="pkopkerrwer text-center">
-                                          <img src={`${CategoryBanner.category_bannerImage_url}/${CategoryBanner.category_bannerImage}`} className="w-100" alt="" />
+                                          <Link to={`${CategoryBanner.category_bannerURL}`}>
+                                            <img style={{height: "295px", objectFit: "cover"}} src={`${CategoryBanner.category_bannerImage_url}/${CategoryBanner.category_bannerImage}`} className="w-100" alt="" />
+                                          </Link>
+                                          
                                           <div className="dkewbjnrkwejrwer mt-2">
-                                            <h5>{CategoryBanner.category_bannerTitle}</h5>
-                                            <a href={`${CategoryBanner.category_bannerURL}`}>SHOW NOW</a>
+                                            {/* <h5>{CategoryBanner.category_bannerTitle}</h5> */}
+                                            {/* <a href={`${CategoryBanner.category_bannerURL}`}>SHOW NOW</a> */}
                                           </div>
                                         </div>
                                       </div>

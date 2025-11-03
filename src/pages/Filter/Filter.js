@@ -16,7 +16,7 @@ export const Filter = () => {
     // eslint-disable-next-line
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const { products, initialProductList, setSortBy, setNewArrival, setReadyToShip, setCstmFit, setOnSale, resetFilter, onSale, newIn } = useFilter();
+  const { products, initialProductList, setSortBy, setNewArrival, setReadyToShip, setCstmFit, setOnSale, resetFilter, onSale, newIn, readyToShip, cstmFit } = useFilter();
   // eslint-disable-next-line
   const [viewType, setViewType] = useState(false);
   const [resFltrMenu, setResFltrMenu] = useState(false);
@@ -235,7 +235,7 @@ export const Filter = () => {
                       </div>
                     </div> */}
                     <div className="doewnkrhwer">
-                      <input type="checkbox" className="d-none" id="huidweujr" name="djikeiewr" onChange={(e) => setNewArrival(e.target.checked)} />
+                      <input type="checkbox" className="d-none" id="huidweujr" name="djikeiewr" checked={newIn} onChange={(e) => setNewArrival(e.target.checked)} />
 
                       <label htmlFor="huidweujr" className="btn btn-main me-1">
                         <i className="bi me-1 bi-plus-circle-dotted"></i> New
@@ -243,7 +243,7 @@ export const Filter = () => {
                     </div>
 
                     <div className="doewnkrhwer">
-                      <input type="checkbox" className="d-none" id="daedfweweer" name="djikeiewr" value="READY TO SHIP" onChange={(e) => setReadyToShip(e.target.checked ? e.target.value : null)}/>
+                      <input type="checkbox" className="d-none" id="daedfweweer" name="djikeiewr" value="READY TO SHIP" checked={readyToShip} onChange={(e) => setReadyToShip(e.target.checked ? e.target.value : null)}/>
 
                       <label htmlFor="daedfweweer" className="btn btn-main me-1">
                         <i className="bi me-1 bi-lightning-charge"></i> Ready to Ship
@@ -251,7 +251,7 @@ export const Filter = () => {
                     </div>
 
                     <div className="doewnkrhwer">
-                      <input type="checkbox" name="djikeiewr" className="d-none" id="gfdewerwr" onChange={(e) => setOnSale(e.target.checked)}/>
+                      <input type="checkbox" name="djikeiewr" className="d-none" id="gfdewerwr" checked={onSale} onChange={(e) => setOnSale(e.target.checked)}/>
                       
                       <label
                         htmlFor="gfdewerwr"
@@ -262,7 +262,7 @@ export const Filter = () => {
                     </div>
 
                     <div className="doewnkrhwer">
-                      <input type="checkbox" name="djikeiewr" className="d-none" id="asddettt" onChange={(e) => setCstmFit(e.target.checked)}/>
+                      <input type="checkbox" name="djikeiewr" className="d-none" id="asddettt" checked={cstmFit} onChange={(e) => setCstmFit(e.target.checked)}/>
 
                       <label htmlFor="asddettt" className="btn btn-main me-1">
                         <i class="bi me-1 bi-vignette"></i>  Custom-fit
@@ -277,10 +277,15 @@ export const Filter = () => {
                       <option value="" selected disabled>
                         Sort By: Recommended
                       </option>
-                      <option value="">Popularity</option>
+                      
+                      {/* <option value="">Popularity</option> */}
+
                       <option value="NEW_ARRIVALS">New Arrivals</option>
+
                       <option value="LOW_TO_HIGH">Price Low to High</option>
+
                       <option value="HIGH_TO_LOW">Price High to Low</option>
+
                       <option value="DISCOUNT_LOW_TO_HIGH">Discount Low to High</option>
                     </select>
                   </div>

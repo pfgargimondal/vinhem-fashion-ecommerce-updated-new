@@ -5,44 +5,65 @@ import { useEffect, useState } from "react";
 import { CareerForm } from "./FormComponent/CareerForm";
 
 export const Career = () => {
-
   const [CareerDetails, setCareerDetails] = useState({});
-  
-    useEffect(() => {
-        const fetchCareer = async () => {
-            // setLoading(true);
-            try {
-                const getresponse = await http.get("/get-career-content");
-                setCareerDetails(getresponse.data);
-            } catch (error) {
-                console.error("Error fetching users:", error);
-            } finally{
-                // setLoading(false);
-            }
-        };
+  const [jobOpenings, setJobOpenings] = useState([]);
+  const [jobAccordion, setJobAccordion] = useState("");
 
-        fetchCareer();
-    }, []);
+
+  useEffect(() => {
+    const fetchCareer = async () => {
+      try {
+        const getresponse = await http.get("/get-career-content");
+        setCareerDetails(getresponse.data);
+      } catch (error) {
+        console.error("Error fetching career content:", error);
+      }
+    };
+    fetchCareer();
+  }, []);
+
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const getresponse = await http.get("/get-opening-jobs");
+        setJobOpenings(getresponse.data.data);
+      } catch (error) {
+        console.error("Error fetching career content:", error);
+      }
+    };
+    fetchJobs();
+  }, []);
+
+
+  const toggleAccordion = (id) => {
+    setJobAccordion(prev => (prev === id ? "" : id));
+  }
+
 
   return (
     <div>
-      <div 
-        class="aboutusbannr"
+      <div
+        className="aboutusbannr"
         style={{
-          backgroundImage: CareerDetails?.image_url && CareerDetails?.data?.banner_image
+          backgroundImage:
+            CareerDetails?.image_url && CareerDetails?.data?.banner_image
               ? `url(${CareerDetails.image_url}/${CareerDetails.data.banner_image})`
-              : "none",
-          }}
+              : "url(./image/fashion-caeer.png)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
       >
-        <div class="container-fluid">
-          <div class="dfgnhdfjhgdf">
-            <div class="row">
-              <div class="col-lg-7"></div>
-              <div class="col-lg-5">
-                <div class="dfbhdf">
-                  <h2>{CareerDetails.data?.banner_title && CareerDetails.data.banner_title}</h2>
+        <div className="container-fluid">
+          <div className="dfgnhdfjhgdf">
+            <div className="row">
+              <div className="col-lg-7"></div>
+              <div className="col-lg-5">
+                <div className="dfbhdf">
+                  <h2>{CareerDetails.data?.banner_title || "Career"}</h2>
                   <p>
-                    {CareerDetails.data?.banner_description && CareerDetails.data.banner_description}
+                    {CareerDetails.data?.banner_description ||
+                      "Celebrating style with every stitch – where trends meet timeless elegance."}
                   </p>
                 </div>
               </div>
@@ -51,101 +72,58 @@ export const Career = () => {
         </div>
       </div>
 
-      <div class="xfnhvjhdfbvgdfg">
-        <div class="container">
-          <div class="sdfhdfgdf">
-            <div class="row">
-              <div class="col-lg-4">
-                <div class="fghdfgdf">
-                  <div class="dfgdf">
-                    {CareerDetails.data?.second_section_image_one && (
-                      <img
-                          src={`${CareerDetails.image_url}/${CareerDetails.data.second_section_image_one}`}
-                          alt=""
-                      />
-                    )}
-                  </div>
-                  <div class="fbgdfg">
-                    <h4>{CareerDetails.data?.second_section_title_one && CareerDetails.data.second_section_title_one}</h4>
-                    <p>{CareerDetails.data?.second_section_description_one && CareerDetails.data.second_section_description_one}</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="fghdfgdf">
-                  <div class="dfgdf">
-                    {CareerDetails.data?.second_section_image_two && (
-                      <img
-                          src={`${CareerDetails.image_url}/${CareerDetails.data.second_section_image_two}`}
-                          alt=""
-                      />
-                    )}
-                  </div>
-                  <div class="fbgdfg">
-                    <h4>{CareerDetails.data?.second_section_title_two && CareerDetails.data.second_section_title_two}</h4>
-                    <p>{CareerDetails.data?.second_section_description_two && CareerDetails.data.second_section_description_two}</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="fghdfgdf">
-                  <div class="dfgdf">
-                    {CareerDetails.data?.second_section_image_three && (
-                      <img
-                          src={`${CareerDetails.image_url}/${CareerDetails.data.second_section_image_three}`}
-                          alt=""
-                      />
-                    )}
-                  </div>
-                  <div class="fbgdfg">
-                    <h4>{CareerDetails.data?.second_section_title_three && CareerDetails.data.second_section_title_three}</h4>
-                    <p>{CareerDetails.data?.second_section_description_three && CareerDetails.data.second_section_description_three}</p>
-                  </div>
-                </div>
-              </div>
+      <div className="fbhjjdfjk554">
+        <div className="wrapper">
+          <div className="dfghdfgd">
+            <div className="container">
+              <h4>
+                {CareerDetails.data?.second_section_title_one ||
+                  "CURRENT OPENING"}
+              </h4>
+              <p>
+                {CareerDetails.data?.second_section_description_one ||
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."}
+              </p>
             </div>
           </div>
+
+          <div className="container">
+            {jobOpenings.map(jobOpening => (
+              <div className="saoidjieor" key={jobOpening?.id}>
+                <div className="question" onClick={() => toggleAccordion(jobOpening.id)}>{jobOpening?.title} <i className={`fa-solid ${jobAccordion === jobOpening.id ? "open fa-minus" : "fa-plus"}`}></i></div>
+
+                <div className={`answercont ${jobAccordion === jobOpening.id ? "open" : ""}`}>
+                  <div className="answer">
+                    <div className="bgdf55ff">
+                      <p>{jobOpening?.description}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>      
         </div>
       </div>
 
-      <div class="ffgbhgdfgf">
-        <div class="container">
-          <div class="dfbgghdfgdfg">
-            <h2>
-              {CareerDetails.data?.third_section_title && CareerDetails.data.third_section_title}
-            </h2>
+      <div className="sdfbjhfsdf">
+        <div className="container">
+          <div className="fnb788f">
+            <h2>{CareerDetails.data?.form_title || "Join Our Team"}</h2>
+
             <div
-                dangerouslySetInnerHTML={{
+              dangerouslySetInnerHTML={{
                 __html:
-                    CareerDetails.data?.third_section_description &&
-                    CareerDetails.data.third_section_description,
-                }} 
+                  CareerDetails.data?.form_description ||
+                  "Be a part of Vinham Fashion’s inspiring creative journey and help us shape the future of global style. Explore exciting career opportunities and grow with our passionate team.",
+              }}
             />
           </div>
+
+          <CareerForm />
         </div>
       </div>
 
-      <div
-        class="dfhgdfbgdfbhjh65"
-        style={{ backgroundImage: "url('/images/careerbgdown (1).png')", backgroundSize: "100% 100%"  }}
-      >
-        <div class="container">
-          <div class="dfgndfgdfg">
-            <div class="fbfdf">
-              <h2>{CareerDetails.data?.form_title && CareerDetails.data.form_title}</h2>
-              <div
-                  dangerouslySetInnerHTML={{
-                  __html:
-                      CareerDetails.data?.form_description &&
-                      CareerDetails.data.form_description,
-                  }} 
-              />
-            </div>
-            <CareerForm />
-          </div>
-        </div>
-      </div>
-      <div class="dfhfjhdfdf">
+      <div className="dfhfjhdfdf">
         <hr />
         <FooterTopComponent />
       </div>

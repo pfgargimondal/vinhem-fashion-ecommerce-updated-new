@@ -30,7 +30,7 @@ import { useCart } from "../../context/CartContext";
 
 export const ProductDetail = () => {
 
-  const { user } = useAuth();
+  const { token, user } = useAuth();
   const { addToCart } = useCart();
   // eslint-disable-next-line
   const [show, setShow] = useState(false);
@@ -82,8 +82,6 @@ export const ProductDetail = () => {
   const [activeTab, setActiveTab] = useState("tab-1");
   
   const [showSizeModal, setShowSizeModal] = useState(false);
-  const [mssrmntSbmtConfrm, setMssrmntSbmtConfrm] = useState(null);
-
 
   //featured products
 
@@ -419,6 +417,57 @@ export const ProductDetail = () => {
   addToCart(productData);
 
 };
+
+  const [mssrmntSbmtConfrm, setMssrmntSbmtConfrm] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+
+    if (!token) {
+      toast.error("Please login to submit measurement data.");
+      return;
+    }
+
+    const savedData = localStorage.getItem("measurementFormData");
+    if (!savedData) {
+      toast.error("No measurement data found! Please fill the measurement form first.");
+      return;
+    }
+
+    // console.log(savedData);
+    const formData = JSON.parse(savedData);
+
+      try {
+        setLoading(true);
+
+        const res = await http.post(
+          "/user/update-measurement-data",
+          {
+            product_id: productDetails?.data?.id,
+            type: productDetails?.data?.custom_feild_selectOption,
+            ...formData,
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        console.log("Response:", res);
+
+        if (res?.data?.success) {
+          toast.success(res.data.message || "Measurement submitted successfully!");
+          localStorage.removeItem("measurementFormData");
+          setMssrmntSbmtConfrm(false);
+        } else {
+          toast.error(res?.data?.message || "Failed to add data");
+        }
+      } catch (error) {
+        console.error("Error submitting measurement:", error);
+        toast.error("Error submitting measurement!");
+      } finally {
+        setLoading(false);
+      }
+  };
 
   return (
     <>
@@ -1517,11 +1566,17 @@ export const ProductDetail = () => {
 
             <div className="dfsfdtgrefcd row align-items-center justify-content-between">
               <div className="col-lg-5 mb-3">
-                <button className="btn btn-main w-100">Yes, Proceed</button>
+                <button
+                  className="btn btn-main w-100"
+                  onClick={handleSubmit}
+                  disabled={loading}
+                >
+                  {loading ? "Submitting..." : "Yes, Proceed"}
+                </button>
               </div>
 
               <div className="col-lg-5 mb-3">
-                <button onClick={() => setMssrmntSbmtConfrm(false)} className="btn btn-main w-100">Cancel</button>
+                <button onClick={() => setMssrmntSbmtConfrm(false)} className="btn btn-main w-100">Edit</button>
               </div>
             </div>
           </div>
