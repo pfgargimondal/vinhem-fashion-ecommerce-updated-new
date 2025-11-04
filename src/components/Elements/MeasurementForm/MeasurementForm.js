@@ -689,15 +689,12 @@ export const MeasurementForm = ({
 
                           <div className="dlwenoijwelkjrwer">
                             <div className="radio-wrapper-7">
-                              <label
-                                className="radio-wrapper-7"
-                                htmlFor="example-7"
-                              >
+                              <label className="radio-wrapper-7" htmlFor="unit-inch">
                                 <input
-                                  id="example-7"
+                                  id="unit-inch"
                                   type="radio"
-                                  defaultChecked
                                   name="unit"
+                                  value="inch"
                                   checked={unit === "inch"}
                                   onChange={(e) => {
                                     setUnit(e.target.value);
@@ -710,14 +707,12 @@ export const MeasurementForm = ({
                                 <span>Inches</span>
                               </label>
 
-                              <label
-                                className="radio-wrapper-7"
-                                htmlFor="example-fde"
-                              >
+                              <label className="radio-wrapper-7" htmlFor="unit-cm">
                                 <input
-                                  id="example-fde"
+                                  id="unit-cm"
                                   type="radio"
                                   name="unit"
+                                  value="cm"
                                   checked={unit === "cm"}
                                   onChange={(e) => {
                                     setUnit(e.target.value);
