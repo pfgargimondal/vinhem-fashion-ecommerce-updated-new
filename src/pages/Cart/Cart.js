@@ -147,7 +147,7 @@ export const Cart = () => {
       console.error("Failed to remove item", error);
     }
   };
-
+    // eslint-disable-next-line
   const handleSizeChange = (cartItemId, newSize) => {
     setcartItems((prevItems) =>
       prevItems.map((item) =>
@@ -174,7 +174,7 @@ export const Cart = () => {
         console.error("Error updating size", err);
       });
   };
-
+  // eslint-disable-next-line
   const handleQuantityChange = (cartItemId, newQuantity) => {
     setcartItems((prevItems) =>
       prevItems.map((item) =>
