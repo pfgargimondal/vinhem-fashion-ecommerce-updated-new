@@ -63,19 +63,39 @@ export const Cart = () => {
   }, [token]);
 
   const getEstimatedShippingDate = (shipping_time) => {
-    const days = parseInt(shipping_time);
-    if (isNaN(days)) return "";
+    if (!shipping_time) return "";
 
-    const date = new Date();
-    date.setDate(date.getDate() + days);
+    const timeStr = shipping_time.toString().toLowerCase().trim();
+    const now = new Date();
 
-    const day = date.getDate();
-    const month = date.toLocaleString("en-US", { month: "long" });
-    // const year = date.getFullYear();
+    let days = 0;
+    let hours = 0;
 
-    return `${day}${getDaySuffix(day)} of ${month}`;
+    // Detect if time is in hours or days
+    if (timeStr.includes("hour") || timeStr.includes("hr") || timeStr.includes("h")) {
+      const hourVal = parseInt(timeStr);
+      if (!isNaN(hourVal)) hours = hourVal;
+    } else if (timeStr.includes("day") || timeStr.includes("d")) {
+      const dayVal = parseInt(timeStr);
+      if (!isNaN(dayVal)) days = dayVal;
+    } else {
+      // Default to days if unit is missing
+      const val = parseInt(timeStr);
+      if (!isNaN(val)) days = val;
+    }
+
+    // Add time
+    now.setDate(now.getDate() + days);
+    now.setHours(now.getHours() + hours);
+
+    // Format date nicely
+    const day = now.getDate();
+    const month = now.toLocaleString("en-US", { month: "long" });
+
+    return ` ${day}${getDaySuffix(day)} of ${month}`;
   };
 
+  // Helper for suffix
   const getDaySuffix = (day) => {
     if (day >= 11 && day <= 13) return "th";
     switch (day % 10) {
@@ -261,14 +281,11 @@ export const Cart = () => {
                                 <div className="row">
                                   <div className="col-lg-3 mt-2 mb-3">
                                     <div className="deiwnriwehrwer">
-                                      <label
-                                        htmlFor=""
-                                        className="form-label mb-1"
-                                      >
-                                        Choose Size:
-                                      </label>
+                                      <label htmlFor="" className="form-label mb-1">Size:</label>
 
-                                      <select
+                                      <input type="text" className="form-control" placeholder={cartItemsVal.size} disabled />
+
+                                      {/* <select
                                         name="product_size"
                                         className="form-select py-1"
                                         id={`product_size_${cartItemsVal.id}`}
@@ -290,20 +307,17 @@ export const Cart = () => {
                                             </option>
                                           )
                                         )}
-                                      </select>
+                                      </select> */}
                                     </div>
                                   </div>
 
                                   <div className="col-lg-3 mt-2 mb-3">
                                     <div className="deiwnriwehrwer">
-                                      <label
-                                        htmlFor=""
-                                        className="form-label mb-1"
-                                      >
-                                        Choose Qty:
-                                      </label>
+                                      <label htmlFor="" className="form-label mb-1">Quantity:</label>
 
-                                      <select
+                                      <input type="text" className="form-control" placeholder={cartItemsVal.quantity} disabled />
+
+                                      {/* <select
                                         name="quantity"
                                         className="form-select py-1"
                                         id={`quantity_${cartItemsVal.id}`}
@@ -327,7 +341,7 @@ export const Cart = () => {
                                             </option>
                                           )
                                         )}
-                                      </select>
+                                      </select> */}
                                     </div>
                                   </div>
                                 </div>
@@ -429,7 +443,7 @@ export const Cart = () => {
                   <Table responsive>
                     <tbody>
                       <tr>
-                        <td>Cart Total</td>
+                        <td>Product Total</td>
 
                         <td>
                           <i class="bi bi-currency-rupee"></i>
@@ -445,13 +459,28 @@ export const Cart = () => {
                           {totalPrice.total_discount_price}
                         </td>
                       </tr>
+                      <tr>
+                        <td>Add On Charges</td>
 
+                        <td>
+                          <i class="bi bi-currency-rupee"></i>
+                          {totalPrice.total_add_on_charges}
+                        </td>
+                      </tr>
                       <tr>
                         <td>Shipping</td>
 
                         <td>
                           <i class="bi bi-currency-rupee"></i>
                           {totalPrice.shipping_charges}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Cart Total</td>
+
+                        <td>
+                          <i class="bi bi-currency-rupee"></i>
+                          {totalPrice.cart_totalPrice}
                         </td>
                       </tr>
                     </tbody>
@@ -473,7 +502,7 @@ export const Cart = () => {
                 </div>
 
                 <div className="oiasmdjweijrwerwer mt-4">
-                  <h4>Coupon Code</h4>
+                  <h4>Individual Product Coupon Code</h4>
 
                   {couponItems?.map((couponItemsVal) => (
                     <div className="jidnwenjrwerwer mb-2">
@@ -571,6 +600,107 @@ export const Cart = () => {
                     )}
                   </div>
                 </div>
+
+                <div className="oiasmdjweijrwerwer mt-4">
+                  <h4>Overall Coupon Code</h4>
+
+                  {couponItems?.map((couponItemsVal) => (
+                    <div className="jidnwenjrwerwer mb-2">
+                      <input
+                        id={couponItemsVal.code}
+                        name="coupon"
+                        type="radio"
+                        className="d-none position-absolute"
+                        checked={selectedCoupon === couponItemsVal.code}
+                        disabled={couponApplied}
+                        onChange={() => {
+                          setSelectedCoupon(couponItemsVal.code);
+                          setSelectedDiscount(parseInt(couponItemsVal.value));
+                          setAppliedDiscount(parseInt(couponItemsVal.value));
+                        }}
+                      />
+
+                      <label
+                        htmlFor={couponItemsVal.code}
+                        className="w-100 position-relative"
+                      >
+                        <div class="coupon">
+                          <div class="left">
+                            <div>Coupon</div>
+                          </div>
+
+                          <div class="center">
+                            <div>
+                              <h3>Get Extra</h3>
+
+                              <h2 className="mb-0">
+                                <i class="bi bi-currency-rupee"></i>
+                                {parseInt(couponItemsVal.value)} OFF
+                              </h2>
+
+                              <small>
+                                Valid until{" "}
+                                {ValidityDate(couponItemsVal.expiry_date)}
+                              </small>
+                            </div>
+                          </div>
+
+                          <div class="right">
+                            <div>{couponItemsVal.code}</div>
+                          </div>
+                        </div>
+
+                        <i class="bi copn-checked-icon position-absolute bi-check-circle-fill"></i>
+                      </label>
+                    </div>
+                  ))}
+
+                  <div className="dewuihrwe position-relative mt-4">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter Coupon Code"
+                      value={selectedCoupon}
+                      onChange={(e) => {
+                        setSelectedCoupon(e.target.value);
+
+                        const coupon = couponItems.find(c => c.code === e.target.value);
+                        if (coupon) {
+                          setSelectedDiscount(parseInt(coupon.value));
+                          setAppliedDiscount(parseInt(coupon.value));
+                        } else {
+                          setSelectedDiscount(0);
+                          setAppliedDiscount(0);
+                        }
+                      }}
+                      disabled={couponApplied}
+                    />
+
+                    {!couponApplied ? (
+                      <button
+                        type="button"
+                        className="btn position-absolute btn-main"
+                        onClick={() => setCouponApplied(true)}
+                      >
+                        Apply
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="btn position-absolute btn-main"
+                        onClick={() => {
+                          setSelectedCoupon("");
+                          setSelectedDiscount(0);
+                          setAppliedDiscount(0);
+                          setCouponApplied(false);
+                        }}
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                </div>
+
                 {appliedDiscount > 0 && (
                   <div className="oiasmdjweijrwerwer d-flex align-items-center justify-content-between zsdvfdesdeadfrer mt-4">
                     <p>Coupon Discount</p>

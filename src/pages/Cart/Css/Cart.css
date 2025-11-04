@@ -141,4 +141,11 @@
   font-size: 0.8rem;
   border-radius: 3px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-}/*# sourceMappingURL=Cart.css.map */
+}
+
+.deiwnriwehrwer input.form-control{
+  padding: 0.25rem 2.25rem 0.25rem 0.75rem !important;  
+  color: var(--bs-body-color);
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+}
