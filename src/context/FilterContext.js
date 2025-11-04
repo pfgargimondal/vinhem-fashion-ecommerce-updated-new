@@ -10,7 +10,7 @@ const filterInitialState = {
     color: null,
     material: null,
     designer: null,    
-    size: null,
+    plusSize: null,
     occasion: null,
     sortBy: null,
     newIn: false,
@@ -151,20 +151,37 @@ export const FilterProvider = ({children}) => {
     }    
 
 
-    //size
+    //plus size
 
-    function setSize(size) {
+    function setPlusSize(plusSize) {
         dispatch({
-            type: "SIZE",
+            type: "PLUS_SIZE",
             payload: {
-                size: size
+                plusSize: plusSize
             }
         })
     }
 
-    function filterSize(products) {
-        return state.size ? products.filter(product => product.size === state.size) : products;
+    console.log(state.plusSize);
+
+    function filterPlusSize(products) {
+        if (!state.plusSize) return products;
+
+        return products.filter(product => {
+            const sizes = product.product_plus_size;
+
+            if (Array.isArray(sizes)) {
+                return sizes.includes(state.plusSize);
+            }
+
+            if (typeof sizes === "string") {
+                return sizes.split(",").map(s => s.trim().toLowerCase()).includes(state.plusSize.toLowerCase());
+            }
+
+            return false;
+        });
     }
+
 
 
     //occasion
@@ -282,7 +299,7 @@ export const FilterProvider = ({children}) => {
     }
 
 
-    const filteredProducts = filterReadyToShip(filterNewArrival(filterOnSale(filterCstmFit(filterSortBy(filterOccasion(filterSize(filterDesigner(filterMaterial(filterColor(filterFilterCategory(filterSubCategory(filterMainCategory(state.productList)))))))))))));
+    const filteredProducts = filterReadyToShip(filterNewArrival(filterOnSale(filterCstmFit(filterSortBy(filterOccasion(filterPlusSize(filterDesigner(filterMaterial(filterColor(filterFilterCategory(filterSubCategory(filterMainCategory(state.productList)))))))))))));
 
 
 
@@ -299,7 +316,7 @@ export const FilterProvider = ({children}) => {
         setColor,
         setMaterial,
         setDesigner,
-        setSize,
+        setPlusSize,
         setOccasion,
         setSortBy,
         setNewArrival,

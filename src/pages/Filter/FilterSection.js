@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useFilter } from "../../context/FilterContext";
 
 export default function FilterSection({ allFilterMappingdata, filterCategories }) {
-  const { setMainCategory, setSubCategory, setFilterCategory, setColor, setMaterial, setDesigner, setSize, setOccasion } = useFilter();
+  const { setMainCategory, setSubCategory, setFilterCategory, setColor, setMaterial, setDesigner, setPlusSize, setOccasion } = useFilter();
   const [selectedTheme, setSelectedTheme] = useState("");
   const [sbctgry, setSbctgry] = useState(null);
   const [insdSbctgry, setInsdSbctgry] = useState(null);
@@ -28,7 +28,7 @@ export default function FilterSection({ allFilterMappingdata, filterCategories }
         break;
 
       case "plus_sizes":
-        setSize(value);
+        setPlusSize(value);
         break;
 
       case "occasion":
