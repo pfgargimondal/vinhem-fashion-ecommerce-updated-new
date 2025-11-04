@@ -6,11 +6,9 @@ export const MeasurementForm = ({
   mssrmntSbmtConfrm,
   setMssrmntSbmtConfrm,
 }) => {
-
   const [activeGuide, setActiveGuide] = useState(null);
   const [feildNameGuide, setFeildNameGuide] = useState(null);
   const [showTabs, setShowTabs] = useState(false);
-
 
   const [selectedSize, setSelectedSize] = useState("");
 
@@ -204,14 +202,14 @@ export const MeasurementForm = ({
     },
     {
       label: "Front Neck Depth",
-      key: "lehenga_front_neck_depth_option",
-      image: "lehenga_front_neck_depth",
+      key: "saree_front_neck_depth_option",
+      image: "saree_front_neck_depth",
       guide: "frontNeckDepth",
     },
     {
       label: "Back Neck Depth",
-      key: "lehenga_back_neck_depth_option",
-      image: "lehenga_back_neck_depth",
+      key: "saree_back_neck_depth_option",
+      image: "saree_back_neck_depth",
       guide: "backNeckDepth",
     },
     {
@@ -228,14 +226,14 @@ export const MeasurementForm = ({
     },
     {
       label: "Petticoat Waist (Inskirt)",
-      key: "lehenga_petticoat_waist_option",
-      image: "lehenga_petticoat_waist",
+      key: "saree_petticoat_waist_option",
+      image: "saree_petticoat_waist",
       guide: "petticoatWaist",
     },
     {
       label: "Petticoat Length (Inskirt)",
-      key: "lehenga_petticoat_length_option",
-      image: "lehenga_petticoat_length",
+      key: "saree_petticoat_length_option",
+      image: "saree_petticoat_length",
       guide: "petticoatLength",
     },
   ];
@@ -431,6 +429,33 @@ export const MeasurementForm = ({
       [name]: type === "checkbox" ? checked : value,
     }));
   };
+
+  const handleChangeLahenga = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+
+  const handleChangeSaree = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleChangeGeneric = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+
   const handleSizeChange = (e) => {
     setSelectedSize(e.target.value);
     setFormData((prev) => ({
@@ -440,10 +465,10 @@ export const MeasurementForm = ({
   };
   const handleSave = () => {
     localStorage.setItem("measurementFormData", JSON.stringify(formData));
+
+    // console.log(JSON.stringify(formData));
     // alert("Measurement data saved. Please confirm on product page.");
   };
-
-
 
   return (
     <div>
@@ -470,7 +495,6 @@ export const MeasurementForm = ({
           </div>
 
           <div className="row gx-0">
-            
             <div className={activeGuide ? "col-lg-6" : "col-lg-12"}>
               <div className="dhwekrwerwer px-4 py-4">
                 {/* <p className="mb-3">For further assistance, Chat with us <button className="btn btn-main"><i className="bi me-1 bi-whatsapp"></i> Chat With Us</button></p> */}
@@ -485,7 +509,7 @@ export const MeasurementForm = ({
                         }
                         alt=""
                       />
-                    </div> 
+                    </div>
 
                     <p>
                       {productDetails?.data?.product_name} -{" "}
@@ -500,9 +524,13 @@ export const MeasurementForm = ({
                       </div>
 
                       <div className="qwererwerrr flex-grow-1">
-                        <input type="text" className="form-control" name="measurment_name" 
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="measurment_name"
                           value={formData.measurment_name}
-                          onChange={handleChange} />
+                          onChange={handleChange}
+                        />
                       </div>
                     </div>
                   </div>
@@ -520,7 +548,9 @@ export const MeasurementForm = ({
                                 type="radio"
                                 name="measurement_fit"
                                 value="Body Fit"
-                                checked={formData.measurement_fit === "Body Fit"}
+                                checked={
+                                  formData.measurement_fit === "Body Fit"
+                                }
                                 onChange={handleChange}
                               />
 
@@ -568,7 +598,9 @@ export const MeasurementForm = ({
                                 type="radio"
                                 name="measurement_fit"
                                 value="Garment Fit"
-                                checked={formData.measurement_fit === "Garment Fit"}
+                                checked={
+                                  formData.measurement_fit === "Garment Fit"
+                                }
                                 onChange={handleChange}
                               />
 
@@ -606,54 +638,61 @@ export const MeasurementForm = ({
                     </div>
                   </div>
                 </div>
-                
+
                 <p className="mb-3">Choose a size to be customized:</p>
 
                 <div className="okemlkwnjrirwer mb-3 d-flex align-items-center">
-                {productDetails?.data?.product_allSize?.flatMap((item, index) => {
-                  // Collect normal + plus sizes (if any)
-                  const sizes = [
-                    { 
-                      label: item.filter_size, 
-                      value: item.filter_size, 
-                      price: item.selling_price 
+                  {productDetails?.data?.product_allSize?.flatMap(
+                    (item, index) => {
+                      // Collect normal + plus sizes (if any)
+                      const sizes = [
+                        {
+                          label: item.filter_size,
+                          value: item.filter_size,
+                          price: item.selling_price,
+                        },
+                      ];
+
+                      if (item.plus_sizes && item.plus_sizes !== "0") {
+                        sizes.push({
+                          label: item.plus_sizes,
+                          value: item.plus_sizes,
+                          price: item.plus_sizes_charges,
+                        });
+                      }
+
+                      return sizes.map((sizeObj, subIndex) => (
+                        <div
+                          className="doeiwjrkweirwe me-2 mb-2"
+                          key={`${index}-${subIndex}`}
+                        >
+                          <input
+                            id={`size-${index}-${subIndex}`}
+                            name="selected_size"
+                            type="radio"
+                            value={sizeObj.value}
+                            checked={selectedSize === sizeObj.value}
+                            onChange={handleSizeChange}
+                            className="d-none position-absolute"
+                          />
+                          <label
+                            htmlFor={`size-${index}-${subIndex}`}
+                            className={`text-center p-2 border rounded ${
+                              selectedSize === sizeObj.value
+                                ? "bg-dark text-white"
+                                : ""
+                            }`}
+                            style={{ minWidth: "70px", cursor: "pointer" }}
+                          >
+                            <span className="d-block mb-1">
+                              ₹{parseFloat(sizeObj.price || 0).toFixed(2)}
+                            </span>
+                            <small>{sizeObj.label}</small>
+                          </label>
+                        </div>
+                      ));
                     }
-                  ];
-
-                  if (item.plus_sizes && item.plus_sizes !== "0") {
-                    sizes.push({ 
-                      label: item.plus_sizes, 
-                      value: item.plus_sizes, 
-                      price: item.plus_sizes_charges 
-                    });
-                  }
-
-                  return sizes.map((sizeObj, subIndex) => (
-                    <div className="doeiwjrkweirwe me-2 mb-2" key={`${index}-${subIndex}`}>
-                      <input
-                        id={`size-${index}-${subIndex}`}
-                        name="selected_size"
-                        type="radio"
-                        value={sizeObj.value}
-                        checked={selectedSize === sizeObj.value}
-                        onChange={handleSizeChange}
-                        className="d-none position-absolute"
-                      />
-                      <label
-                        htmlFor={`size-${index}-${subIndex}`}
-                        className={`text-center p-2 border rounded ${
-                          selectedSize === sizeObj.value ? "bg-dark text-white" : ""
-                        }`}
-                        style={{ minWidth: "70px", cursor: "pointer" }}
-                      >
-                        <span className="d-block mb-1">
-                          ₹{parseFloat(sizeObj.price || 0).toFixed(2)}
-                        </span>
-                        <small>{sizeObj.label}</small>
-                      </label>
-                    </div>
-                  ));
-                })}
+                  )}
                 </div>
 
                 <p>Customized orders can take minimum 7 extra working days</p>
@@ -682,14 +721,16 @@ export const MeasurementForm = ({
 
                   {showTabs && (
                     <div className="doiewnjkrhwerwerwer mt-3">
-                      
                       <div className="dkewnjkhriwer">
                         <div className="d-flex align-items-center justify-content-between">
                           <h5 className="mb-0 px-3 py-2">Measurement Form</h5>
 
                           <div className="dlwenoijwelkjrwer">
                             <div className="radio-wrapper-7">
-                              <label className="radio-wrapper-7" htmlFor="unit-inch">
+                              <label
+                                className="radio-wrapper-7"
+                                htmlFor="unit-inch"
+                              >
                                 <input
                                   id="unit-inch"
                                   type="radio"
@@ -707,7 +748,10 @@ export const MeasurementForm = ({
                                 <span>Inches</span>
                               </label>
 
-                              <label className="radio-wrapper-7" htmlFor="unit-cm">
+                              <label
+                                className="radio-wrapper-7"
+                                htmlFor="unit-cm"
+                              >
                                 <input
                                   id="unit-cm"
                                   type="radio"
@@ -729,7 +773,8 @@ export const MeasurementForm = ({
                         </div>
                       </div>
 
-                      {productDetails?.data?.custom_feild_selectOption === "lehenga" && (
+                      {productDetails?.data?.custom_feild_selectOption ===
+                        "lehenga" && (
                         <>
                           {/* ------------------ Choli Measurement ------------------ */}
                           <div className="asdasdaswwee mt-2">
@@ -740,10 +785,12 @@ export const MeasurementForm = ({
                               <div className="row">
                                 {fields.map((field, index) => {
                                   const keyWithUnit =
-                                    productDetails?.data?.mesurament_form_data?.[
+                                    productDetails?.data
+                                      ?.mesurament_form_data?.[
                                       `${field.key}_inch`
                                     ] ||
-                                    productDetails?.data?.mesurament_form_data?.[
+                                    productDetails?.data
+                                      ?.mesurament_form_data?.[
                                       `${field.key}_cm`
                                     ]
                                       ? unit === "inch"
@@ -752,9 +799,9 @@ export const MeasurementForm = ({
                                       : field.key;
 
                                   const options =
-                                    productDetails?.data?.mesurament_form_data?.[keyWithUnit]?.split(
-                                      ","
-                                    ) || [];
+                                    productDetails?.data?.mesurament_form_data?.[
+                                      keyWithUnit
+                                    ]?.split(",") || [];
 
                                   return (
                                     <div className="col-lg-6 mb-3" key={index}>
@@ -763,7 +810,10 @@ export const MeasurementForm = ({
                                         <span
                                           className="enqury-guide"
                                           onClick={() =>
-                                            handleGuideClick(field.guide, field.image)
+                                            handleGuideClick(
+                                              field.guide,
+                                              field.image
+                                            )
                                           }
                                         >
                                           <i className="fa-solid fa-info"></i>
@@ -771,7 +821,13 @@ export const MeasurementForm = ({
                                       </label>
 
                                       {/* ✅ Added name attribute */}
-                                      <select className="form-select" name={keyWithUnit}>
+
+                                      <select
+                                        className="form-select"
+                                        name={field.key}
+                                        onChange={handleChangeLahenga}
+                                        value={formData[field.key] || ""}
+                                      >
                                         <option disabled selected>
                                           --Select Here--
                                         </option>
@@ -797,7 +853,9 @@ export const MeasurementForm = ({
                             <div className="row" key={`lehenga-${unit}`}>
                               {lehengaFields.map((field, index) => {
                                 // Petticoat Waist toggle
-                                if (field.key === "lehenga_petticoat_waist_option") {
+                                if (
+                                  field.key === "lehenga_petticoat_waist_option"
+                                ) {
                                   return (
                                     <React.Fragment key={index}>
                                       {/* ✅ Checkbox with name */}
@@ -808,7 +866,9 @@ export const MeasurementForm = ({
                                             className="me-2"
                                             name="with_petticoat_lahenga"
                                             checked={showPetticoat}
-                                            onChange={() => setShowPetticoat(!showPetticoat)}
+                                            onChange={() =>
+                                              setShowPetticoat(!showPetticoat)
+                                            }
                                           />
                                           With Petticoat (Inskirt)
                                         </label>
@@ -822,21 +882,31 @@ export const MeasurementForm = ({
                                             <span
                                               className="enqury-guide"
                                               onClick={() =>
-                                                handleGuideClick(field.guide, field.image)
+                                                handleGuideClick(
+                                                  field.guide,
+                                                  field.image
+                                                )
                                               }
                                             >
                                               <i className="fa-solid fa-info"></i>
                                             </span>
                                           </label>
-                                          <select className="form-select" name={field.key}>
+                                          <select
+                                            className="form-select"
+                                            name={field.key}
+                                            onChange={handleChangeLahenga}
+                                            value={formData[field.key] || ""}
+                                          >
                                             <option disabled selected>
                                               --Select Here--
                                             </option>
-                                            {getOptions(field.key).map((val, i) => (
-                                              <option key={i} value={val}>
-                                                {val}
-                                              </option>
-                                            ))}
+                                            {getOptions(field.key).map(
+                                              (val, i) => (
+                                                <option key={i} value={val}>
+                                                  {val}
+                                                </option>
+                                              )
+                                            )}
                                           </select>
                                         </div>
                                       )}
@@ -846,7 +916,8 @@ export const MeasurementForm = ({
 
                                 // Hide Petticoat Length if unchecked
                                 if (
-                                  field.key === "lehenga_petticoat_length_option" &&
+                                  field.key ===
+                                    "lehenga_petticoat_length_option" &&
                                   !showPetticoat
                                 ) {
                                   return null;
@@ -859,12 +930,22 @@ export const MeasurementForm = ({
                                       {field.label}
                                       <span
                                         className="enqury-guide"
-                                        onClick={() => handleGuideClick(field.guide, field.image)}
+                                        onClick={() =>
+                                          handleGuideClick(
+                                            field.guide,
+                                            field.image
+                                          )
+                                        }
                                       >
                                         <i className="fa-solid fa-info"></i>
                                       </span>
                                     </label>
-                                    <select className="form-select" name={field.key}>
+                                    <select
+                                      className="form-select"
+                                      name={field.key}
+                                      onChange={handleChangeLahenga}
+                                      value={formData[field.key] || ""}
+                                    >
                                       <option disabled selected>
                                         --Select Here--
                                       </option>
@@ -885,6 +966,8 @@ export const MeasurementForm = ({
                                     type="checkbox"
                                     className="me-2"
                                     name="fall_edging_work_lahenga"
+                                    checked={!!formData.fall_edging_work_lahenga}
+                                    onChange={handleChangeLahenga}
                                   />
                                   Fall & Edging Work
                                 </label>
@@ -896,6 +979,8 @@ export const MeasurementForm = ({
                                     type="checkbox"
                                     className="me-2"
                                     name="matching_tassles_lahenga"
+                                    checked={!!formData.matching_tassles_lahenga}
+                                    onChange={handleChangeLahenga}
                                   />
                                   Matching Tassles
                                 </label>
@@ -912,12 +997,13 @@ export const MeasurementForm = ({
                               name="additional_customization_lahenga"
                               className="form-control"
                               placeholder="Please specify any additional customization requests here."
+                              onChange={handleChangeLahenga}
+                              value={formData.additional_customization_lahenga || ""}
                               style={{ height: "150px" }}
                             ></textarea>
                           </div>
                         </>
                       )}
-
 
                       {productDetails?.data?.custom_feild_selectOption ===
                         "saree" && (
@@ -927,7 +1013,9 @@ export const MeasurementForm = ({
                             <div className="row" key={`saree-${unit}`}>
                               {sareeFields.map((field, index) => {
                                 // Petticoat Waist Option (with checkbox)
-                                if (field.key === "saree_petticoat_waist_option") {
+                                if (
+                                  field.key === "saree_petticoat_waist_option"
+                                ) {
                                   return (
                                     <React.Fragment key={index}>
                                       {/* Checkbox */}
@@ -942,7 +1030,8 @@ export const MeasurementForm = ({
                                               setShowPetticoat(!showPetticoat);
                                               setFormData((prev) => ({
                                                 ...prev,
-                                                include_petticoat: !showPetticoat,
+                                                include_petticoat:
+                                                  !showPetticoat,
                                               }));
                                             }}
                                           />
@@ -958,7 +1047,10 @@ export const MeasurementForm = ({
                                             <span
                                               className="enqury-guide"
                                               onClick={() =>
-                                                handleGuideClick(field.guide, field.image)
+                                                handleGuideClick(
+                                                  field.guide,
+                                                  field.image
+                                                )
                                               }
                                             >
                                               <i className="fa-solid fa-info"></i>
@@ -967,17 +1059,19 @@ export const MeasurementForm = ({
                                           <select
                                             className="form-select"
                                             name={field.key}
-                                            onChange={handleChange}
+                                            onChange={handleChangeSaree}
                                             value={formData[field.key] || ""}
                                           >
                                             <option disabled value="">
                                               --Select Here--
                                             </option>
-                                            {getOptions(field.key).map((val, i) => (
-                                              <option key={i} value={val}>
-                                                {val}
-                                              </option>
-                                            ))}
+                                            {getOptions(field.key).map(
+                                              (val, i) => (
+                                                <option key={i} value={val}>
+                                                  {val}
+                                                </option>
+                                              )
+                                            )}
                                           </select>
                                         </div>
                                       )}
@@ -986,7 +1080,11 @@ export const MeasurementForm = ({
                                 }
 
                                 // Petticoat Length — hide if Petticoat is not selected
-                                if (field.key === "saree_petticoat_length_option" && !showPetticoat) {
+                                if (
+                                  field.key ===
+                                    "saree_petticoat_length_option" &&
+                                  !showPetticoat
+                                ) {
                                   return null;
                                 }
 
@@ -997,7 +1095,12 @@ export const MeasurementForm = ({
                                       {field.label}
                                       <span
                                         className="enqury-guide"
-                                        onClick={() => handleGuideClick(field.guide, field.image)}
+                                        onClick={() =>
+                                          handleGuideClick(
+                                            field.guide,
+                                            field.image
+                                          )
+                                        }
                                       >
                                         <i className="fa-solid fa-info"></i>
                                       </span>
@@ -1005,7 +1108,7 @@ export const MeasurementForm = ({
                                     <select
                                       className="form-select"
                                       name={field.key}
-                                      onChange={handleChange}
+                                      onChange={handleChangeSaree}
                                       value={formData[field.key] || ""}
                                     >
                                       <option disabled value="">
@@ -1028,8 +1131,10 @@ export const MeasurementForm = ({
                                     type="checkbox"
                                     className="me-2"
                                     name="saree_fall_edging"
-                                    checked={formData.saree_fall_edging || false}
-                                    onChange={handleChange}
+                                    checked={
+                                      formData.saree_fall_edging || false
+                                    }
+                                    onChange={handleChangeSaree}
                                   />
                                   Fall & Edging Work
                                 </label>
@@ -1041,8 +1146,10 @@ export const MeasurementForm = ({
                                     type="checkbox"
                                     className="me-2"
                                     name="saree_matching_tassles"
-                                    checked={formData.saree_matching_tassles || false}
-                                    onChange={handleChange}
+                                    checked={
+                                      formData.saree_matching_tassles || false
+                                    }
+                                    onChange={handleChangeSaree}
                                   />
                                   Matching Tassles
                                 </label>
@@ -1059,16 +1166,18 @@ export const MeasurementForm = ({
                                 className="form-control"
                                 placeholder="Please specify any additional customization requests here."
                                 style={{ height: "150px" }}
-                                value={formData.additional_customize_saree || ""}
-                                onChange={handleChange}
+                                value={
+                                  formData.additional_customize_saree || ""
+                                }
+                                onChange={handleChangeSaree}
                               ></textarea>
                             </div>
                           </div>
-
                         </>
                       )}
 
-                      {productDetails?.data?.custom_feild_selectOption === "dress" && (
+                      {productDetails?.data?.custom_feild_selectOption ===
+                        "dress" && (
                         <>
                           {/* Kurta Measurement */}
                           <div className="asdasdaswwee mt-2">
@@ -1080,10 +1189,12 @@ export const MeasurementForm = ({
                                 {dressFields.map((field, index) => {
                                   // Detect inch/cm-based key
                                   const keyWithUnit =
-                                    productDetails?.data?.mesurament_form_data?.[
+                                    productDetails?.data
+                                      ?.mesurament_form_data?.[
                                       `${field.key}_inch`
                                     ] ||
-                                    productDetails?.data?.mesurament_form_data?.[
+                                    productDetails?.data
+                                      ?.mesurament_form_data?.[
                                       `${field.key}_cm`
                                     ]
                                       ? unit === "inch"
@@ -1103,7 +1214,10 @@ export const MeasurementForm = ({
                                         <span
                                           className="enqury-guide"
                                           onClick={() =>
-                                            handleGuideClick(field.guide, field.image)
+                                            handleGuideClick(
+                                              field.guide,
+                                              field.image
+                                            )
                                           }
                                         >
                                           <i className="fa-solid fa-info"></i>
@@ -1141,10 +1255,12 @@ export const MeasurementForm = ({
                               <div className="row">
                                 {bottomDressFields.map((field, index) => {
                                   const keyWithUnit =
-                                    productDetails?.data?.mesurament_form_data?.[
+                                    productDetails?.data
+                                      ?.mesurament_form_data?.[
                                       `${field.key}_inch`
                                     ] ||
-                                    productDetails?.data?.mesurament_form_data?.[
+                                    productDetails?.data
+                                      ?.mesurament_form_data?.[
                                       `${field.key}_cm`
                                     ]
                                       ? unit === "inch"
@@ -1164,7 +1280,10 @@ export const MeasurementForm = ({
                                         <span
                                           className="enqury-guide"
                                           onClick={() =>
-                                            handleGuideClick(field.guide, field.image)
+                                            handleGuideClick(
+                                              field.guide,
+                                              field.image
+                                            )
                                           }
                                         >
                                           <i className="fa-solid fa-info"></i>
@@ -1210,7 +1329,6 @@ export const MeasurementForm = ({
                         </>
                       )}
 
-
                       {productDetails?.data?.custom_feild_selectOption === "generic" && (
                         <>
                           <div className="asdasdaswwee mt-2">
@@ -1225,7 +1343,6 @@ export const MeasurementForm = ({
                                     <div className="col-lg-6 mb-3" key={field.key}>
                                       <label className="form-label d-flex align-items-center justify-content-between">
                                         <span>{field.label}</span>
-
                                         <span
                                           className="enqury-guide ms-2"
                                           onClick={() =>
@@ -1240,11 +1357,14 @@ export const MeasurementForm = ({
                                         </span>
                                       </label>
 
+                                      {/* ✅ Controlled select with handleChange */}
                                       <select
                                         className="form-select"
-                                        name={field.key} // ✅ Added dynamic name
+                                        name={field.key}
+                                        onChange={handleChangeGeneric}
+                                        value={formData[field.key] || ""}
                                       >
-                                        <option disabled selected>
+                                        <option disabled value="">
                                           --Select Here--
                                         </option>
                                         {getOptionsGeneric(field.key).map((val, i) => (
@@ -1260,27 +1380,30 @@ export const MeasurementForm = ({
                             </div>
                           </div>
 
-                          {/* Additional Customization */}
+                          {/* ✅ Additional Customization */}
                           <div className="col-lg-12 mb-3">
                             <label className="form-label">
                               Additional customization requests here.
                             </label>
                             <textarea
-                              name="additional_customization" // ✅ Added name
+                              name="additional_customization"
                               className="form-control"
                               placeholder="Please specify any additional customization requests here."
                               style={{ height: "150px" }}
+                              onChange={handleChangeGeneric}
+                              value={formData.additional_customization || ""}
                             ></textarea>
                           </div>
                         </>
                       )}
+
                     </div>
                   )}
                 </div>
                 {/* </form> */}
               </div>
             </div>
-            
+
             {activeGuide && (
               <div className="col-lg-6">
                 <div className="doienkwjrewewr p-5 pt-2">

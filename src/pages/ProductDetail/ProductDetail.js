@@ -452,12 +452,14 @@ export const ProductDetail = () => {
           }
         );
 
-        console.log("Response:", res);
+        // console.log("Response:", res);
 
         if (res?.data?.success) {
           toast.success(res.data.message || "Measurement submitted successfully!");
           localStorage.removeItem("measurementFormData");
           setMssrmntSbmtConfrm(false);
+          setShowSizeModal(false);
+
         } else {
           toast.error(res?.data?.message || "Failed to add data");
         }
@@ -467,6 +469,57 @@ export const ProductDetail = () => {
       } finally {
         setLoading(false);
       }
+  };
+
+
+  const [measurementDetails, SetmeasurementDetails] = useState({});
+  useEffect(() => {
+    if (!token || !productDetails?.data?.id) return;
+    const fetchUserMeasurement = async () => {
+      try {
+
+        const measurresponse = await http.get(`/user/fetch-measurement-details/${productDetails?.data?.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        SetmeasurementDetails(measurresponse.data);
+
+      } catch (error) {
+        console.error("Error fetching measurement details:", error);
+      }
+    };
+
+    fetchUserMeasurement();
+
+  }, [token, productDetails?.data?.id]);
+
+
+  const [pincode, setPincode] = useState("");
+  const [deliveryMsg, setDeliveryMsg] = useState("");
+
+  const handleChangePincode = async (e) => {
+    e.preventDefault();
+
+    if (!pincode) {
+      setDeliveryMsg("Please enter a valid pincode!");
+      return;
+    }
+
+    try {
+      const res = await http.post("/check-pincode", {
+        product_id: productDetails?.data?.id, 
+      });
+
+      if (res.data.success) {
+        setDeliveryMsg(`Delivering to this location by, ${res.data.data}`);
+        // toast.success("Delivery available!");
+      } else {
+        setDeliveryMsg(res.data.message);
+        // toast.error("Delivery not available!");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Error checking pincode!");
+    }
   };
 
   return (
@@ -733,7 +786,32 @@ export const ProductDetail = () => {
                       {productDetails?.data?.stitching_option !== 'Ready To Wear' && (
                           productDetails?.data?.custom_fit?.toLowerCase() === 'yes' && (
                             <div className="ikasdnjiknswjirhwer mb-4">
-                              <p className="mb-1">Submit Measurement: <span><Link to="" onClick={(e) => handleShowModal(e)}>CLICK HERE</Link></span> or <span><Link to="">Later</Link></span></p>
+                              <p className="mb-1">Submit Measurement: <span>
+                                {measurementDetails?.data ? (
+                                  <Link
+                                    to=""
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      toast.warning("Measurement details already added!");
+                                    }}
+                                  >
+                                    CLICK HERE
+                                  </Link>
+                                ) : (
+                                  <Link
+                                    to=""
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      handleShowModal(e);
+                                    }}
+                                  >
+                                    CLICK HERE
+                                  </Link>
+                                )}
+                                </span> or <span>
+                                  <Link to="">Later</Link>
+                                  </span>
+                                </p>
                               <p className="mb-0">+7 days, for your chosen stitching options.</p>
                             </div>
                           )
@@ -1004,24 +1082,35 @@ export const ProductDetail = () => {
                     <div className="kjidbwejgrwerwer col-lg-12 position-relative mt-5">
                       <i class="bi bi-geo-alt position-absolute"></i>
 
-                      <input
-                        type="number"
-                        name="pincode"
-                        className="form-control"
-                        placeholder="ex. 700001"
-                      />
 
-                      <button className="btn btn-main position-absolute">
-                        Change
-                      </button>
+
+                      <form onSubmit={handleChangePincode}>
+                        <input
+                          type="number"
+                          name="pincode"
+                          className="form-control"
+                          placeholder="ex. 700001"
+                          value={pincode}
+                          onChange={(e) => setPincode(e.target.value)}
+                          style={{ paddingRight: "100px" }}
+                        />
+
+                        <button type="submit" className="btn btn-main position-absolute">
+                          Change
+                        </button>
+                      </form>
                     </div>
 
-                    <div className="doiejnwkhrwer mt-4">
-                      <p className="mb-1">
-                        Delivering to GURDASPUR by 18th July 2025. Order within
-                        11h 49m
-                      </p>
-                    </div>
+                    {deliveryMsg && (
+                      <div className="doiejnwkhrwer mt-4">
+                        <p className="mb-1">
+                          {/* Delivering to GURDASPUR by 18th July 2025. Order within
+                          11h 49m */}
+                          {deliveryMsg}
+                        </p>
+                      </div>
+                    )}
+                    
 
                     <div className="diwenjrbwebrwehgrwer mt-5">
                       <h4 className="pb-2">Customer Info</h4>
