@@ -377,14 +377,14 @@ export const ProductDetail = () => {
     ? parseFloat(productDetails?.data?.stole_charges?.price || 0)
     : 0;
 
-  const totalPrice =
-    (priceToUse +
-      stitchingCharge +
-      customFitCharge +
-      turbanCharge +
-      mojriCharge +
-      stoleCharge) *
-    selectedQuantity;
+  // const totalPrice =
+  //   (priceToUse +
+  //     stitchingCharge +
+  //     customFitCharge +
+  //     turbanCharge +
+  //     mojriCharge +
+  //     stoleCharge) *
+  //   selectedQuantity;
 
   // ✅ 5. Prepare cart data
   const productData = {
@@ -392,7 +392,7 @@ export const ProductDetail = () => {
     size: selectedSize || "Default Size",
     quantity: selectedQuantity,
     price_per_unit: priceToUse,
-    total_price: totalPrice.toFixed(2),
+    // total_price: totalPrice.toFixed(2),
 
     // Stitching & custom fit
     stitch_option: selectedStitchOption,

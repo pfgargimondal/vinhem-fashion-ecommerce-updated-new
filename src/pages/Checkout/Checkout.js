@@ -702,6 +702,7 @@ export const Checkout = () => {
                                 <div className="dewuihrwe position-relative mt-4">
                                     <input
                                         type="text"
+                                        name="coupon_code"
                                         className="form-control"
                                         placeholder="Enter Coupon Code"
                                         value={selectedCoupon}
@@ -752,6 +753,7 @@ export const Checkout = () => {
                             </div>
                             {cartItems?.map((cartItemsVal) => (
                                 <div className="doiwehirhweker p-2">
+                                    <Link to={`/products/${cartItemsVal.slug}`}>
                                     <div className="row">
                                         <div className="col-lg-3">
                                             <div className="idjkewerr_left">
@@ -790,9 +792,9 @@ export const Checkout = () => {
                                                 <p className="mb-1">{cartItemsVal.product_name}</p>
 
                                                 <div className="d-flex align-items-center">
-                                                    <p className="mb-1">Color: <span>{cartItemsVal.color}</span></p>
+                                                    <p className="mb-1">Color: <span>{cartItemsVal.color}</span></p>&nbsp;&nbsp;&nbsp;
 
-                                                    <p className="mb-1">Size: <span>{cartItemsVal.product_size}</span></p>
+                                                    <p className="mb-1"> Size: <span>{cartItemsVal.size}</span></p>
 
                                                     {/* <p className="mb-1">Customize: <span><a href="/">Add Details</a></span></p> */}
                                                 </div>
@@ -800,15 +802,12 @@ export const Checkout = () => {
                                                 <p className="mb-1">Price: <span><i class="fa-solid fa-indian-rupee-sign"></i> {cartItemsVal.actual_price}</span></p>
 
                                                 <p>
-                                                    <i class="bi me-1 bi-truck"></i>{cartItemsVal?.non_returnable
-                                                    ? cartItemsVal.non_returnable === 'No'
-                                                        ? 'No return/exchange available'
-                                                        : 'Return/exchange available'
-                                                    : null}
+                                                    <i class="bi me-1 bi-truck"></i>{cartItemsVal?.non_returnable}
                                                 </p>                                            
                                             </div>
                                         </div>
                                     </div>
+                                    </Link>
                                 </div>
                             ))}
                             
@@ -823,6 +822,14 @@ export const Checkout = () => {
 
                                             <td>
                                                 <i class="bi bi-currency-rupee"></i>{totalPrice.total_selling_price}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Add On Charges</td>
+
+                                            <td>
+                                                <i class="bi bi-currency-rupee"></i>{totalPrice.total_add_on_charges}
                                             </td>
                                         </tr>
 
@@ -854,7 +861,7 @@ export const Checkout = () => {
                                         <h4 className="mb-0">TOTAL PAYABLE</h4>
 
                                         <h4 className="mb-0">
-                                            <i class="bi bi-currency-rupee"></i>{(Number(totalPrice.total_selling_price) + Number(totalPrice.shipping_charges)) - appliedDiscount}
+                                            <i class="bi bi-currency-rupee"></i>{(Number(totalPrice.total_selling_price) + Number(totalPrice.total_add_on_charges) + Number(totalPrice.shipping_charges)) - appliedDiscount}
                                         </h4>
                                     </div>
 

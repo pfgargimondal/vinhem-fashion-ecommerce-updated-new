@@ -16,6 +16,8 @@ export const Cart = () => {
   const { token } = useAuth();
   const [cartItems, setcartItems] = useState([]);
   const [totalPrice, settotalPrice] = useState([]);
+    // eslint-disable-next-line
+  const [productCoupon, setproductCoupon] = useState([]);
   const [couponItems, setcouponItems] = useState([]);
   const [selectedCoupon, setSelectedCoupon] = useState("");
   // eslint-disable-next-line
@@ -36,6 +38,7 @@ export const Cart = () => {
       );
       setcartItems(res.data.data || []);
       settotalPrice(res.data.total_cart_price || "");
+      setproductCoupon(res.data.all_productCoupon || []);
     } catch (error) {
       console.error("Failed to fetch cart list", error);
     }
@@ -201,14 +204,14 @@ export const Cart = () => {
   };
 
   const handleCheckout = () => {
-    const missingSize = cartItems.find((item) => !item.product_size);
+    // const missingSize = cartItems.find((item) => !item.product_size);
 
-    if (missingSize) {
-      toast.error(
-        `Please select size for "${missingSize.product_name}" before checkout.`
-      );
-      return; 
-    }
+    // if (missingSize) {
+    //   toast.error(
+    //     `Please select size for "${missingSize.product_name}" before checkout.`
+    //   );
+    //   return; 
+    // }
     navigate("/checkout");
   };
 
@@ -238,10 +241,12 @@ export const Cart = () => {
                       <div className="row">
                         <div className="col-lg-2">
                           <div className="donweihrwewer">
-                            <img
-                              src={cartItemsVal.encoded_image_url_1}
-                              alt={cartItemsVal.product_name}
-                            />
+                            <Link to={`/products/${cartItemsVal.slug}`}>
+                              <img
+                                src={cartItemsVal.encoded_image_url_1}
+                                alt={cartItemsVal.product_name}
+                              />
+                            </Link>
                           </div>
                         </div>
 
@@ -480,7 +485,7 @@ export const Cart = () => {
 
                         <td>
                           <i class="bi bi-currency-rupee"></i>
-                          {totalPrice.cart_totalPrice}
+                          {Number(totalPrice.cart_totalPrice) + Number(totalPrice.shipping_charges)}
                         </td>
                       </tr>
                     </tbody>
@@ -501,27 +506,27 @@ export const Cart = () => {
                   <span>(Know More)</span>
                 </div>
 
-                <div className="oiasmdjweijrwerwer mt-4">
+                {/* <div className="oiasmdjweijrwerwer mt-4">
                   <h4>Individual Product Coupon Code</h4>
 
-                  {couponItems?.map((couponItemsVal) => (
+                  {productCoupon.Product_coupon_code?.map((productCouponCode) => (
                     <div className="jidnwenjrwerwer mb-2">
                       <input
-                        id={couponItemsVal.code}
+                        id={productCouponCode.code}
                         name="coupon"
                         type="radio"
                         className="d-none position-absolute"
-                        checked={selectedCoupon === couponItemsVal.code}
+                        checked={selectedCoupon === productCouponCode.code}
                         disabled={couponApplied}
                         onChange={() => {
-                          setSelectedCoupon(couponItemsVal.code);
-                          setSelectedDiscount(parseInt(couponItemsVal.value));
-                          setAppliedDiscount(parseInt(couponItemsVal.value));
+                          setSelectedCoupon(productCouponCode.code);
+                          setSelectedDiscount(parseInt(productCouponCode.value));
+                          setAppliedDiscount(parseInt(productCouponCode.value));
                         }}
                       />
 
                       <label
-                        htmlFor={couponItemsVal.code}
+                        htmlFor={productCouponCode.code}
                         className="w-100 position-relative"
                       >
                         <div class="coupon">
@@ -535,18 +540,18 @@ export const Cart = () => {
 
                               <h2 className="mb-0">
                                 <i class="bi bi-currency-rupee"></i>
-                                {parseInt(couponItemsVal.value)} OFF
+                                {parseInt(productCouponCode.value)} OFF
                               </h2>
 
                               <small>
                                 Valid until{" "}
-                                {ValidityDate(couponItemsVal.expiry_date)}
+                                {ValidityDate(productCouponCode.expiry_date)}
                               </small>
                             </div>
                           </div>
 
                           <div class="right">
-                            <div>{couponItemsVal.code}</div>
+                            <div>{productCouponCode.code}</div>
                           </div>
                         </div>
 
@@ -599,7 +604,7 @@ export const Cart = () => {
                       </button>
                     )}
                   </div>
-                </div>
+                </div> */}
 
                 <div className="oiasmdjweijrwerwer mt-4">
                   <h4>Overall Coupon Code</h4>
@@ -717,7 +722,7 @@ export const Cart = () => {
 
                   <h4>
                     <i class="bi bi-currency-rupee"></i>
-                    {(Number(totalPrice.total_selling_price) + Number(totalPrice.shipping_charges)) - appliedDiscount}
+                    {(Number(totalPrice.total_selling_price) + Number(totalPrice.total_add_on_charges) + Number(totalPrice.shipping_charges)) - appliedDiscount}
                   </h4>
                   
                 </div>
