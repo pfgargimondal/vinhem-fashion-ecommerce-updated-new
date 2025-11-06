@@ -259,20 +259,35 @@ export const Cart = () => {
                                 </h4>
 
                                 <h5 className="mb-0">
-                                  <span className="old-price">
-                                    <i class="bi bi-currency-rupee"></i>
-                                    {cartItemsVal.mrp_price}
-                                  </span>
-                                  <span>
-                                    <i class="bi bi-currency-rupee"></i>
-                                    {cartItemsVal.selling_price}
-                                  </span>
+                                  {cartItemsVal.plus_sizes_charges === '0' ? (
+                                    <>
+                                      <span className="old-price">
+                                        <i class="bi bi-currency-rupee"></i>
+                                        {cartItemsVal.mrp_price}
+                                      </span>
+                                      <span>
+                                        <i class="bi bi-currency-rupee"></i>
+                                        {cartItemsVal.selling_price} 
+                                      </span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <span>
+                                        <i class="bi bi-currency-rupee"></i>
+                                        {cartItemsVal.plus_sizes_charges} 
+                                      </span>
+                                    </>
+                                  )}
+                                  
                                 </h5>
                               </div>
-
-                              <span className="dscnt-offr text-white position-absolute py-1 px-2">
-                                {cartItemsVal.discount}% OFF
-                              </span>
+                              {cartItemsVal.plus_sizes_charges === '0' && (
+                                <>
+                                  <span className="dscnt-offr text-white position-absolute py-1 px-2">
+                                    {cartItemsVal.discount}% OFF
+                                  </span>
+                                </>
+                              )}
                             </div>
 
                             <div className="dnweghbjewrwer">
